@@ -35,7 +35,7 @@ function get_index_from_var_name(str::String)::Tuple
     return (first_idx, second_idx, third_idx)
 end
 
-file = "case5.m"
+file = "case9.m"
 data = parse_matpower(file)
 pm = instantiate_model(file, ACRPowerModel, PowerModels.build_opf)
 
@@ -59,15 +59,36 @@ Pmax = [data["gen"]["$(i)"]["pmax"] for i in 1:N_gen]
 Qmax = [data["gen"]["$(i)"]["qmax"] for i in 1:N_gen]
 Pmin = [data["gen"]["$(i)"]["pmin"] for i in 1:N_gen]
 Qmin = [data["gen"]["$(i)"]["qmin"] for i in 1:N_gen]
-c = [data["gen"]["$(i)"]["cost"][1] for i in 1:N_gen] # assume linear cost
+
+# collect generator cost data
+gen_cost_type = data["gen"]["1"]["model"] # assume all generators have the same cost model type
+if gen_cost_type == 2
+    # neglect startup/shutdown costs
+    costs = [data["gen"]["$(i)"]["cost"] for i in 1:N_gen]
+end
+
+# collect shunt data
+N_shunt = length(data["shunt"])
+shunt_node = [data["shunt"]["$(i)"]["shunt_bus"] for i in 1:N_shunt]
+gs = Dict()
+bs = Dict()
+for i in 1:N_shunt
+    gs[shunt_node[i]] = data["shunt"]["$(i)"]["gs"]
+    bs[shunt_node[i]] = data["shunt"]["$(i)"]["bs"]
+end
 
 # Partition data
-N_g1 = [1, 2, 3]
-N_g2 = [4, 5]
-L_g1 = [(1,2), (2,3), (1,4), (1,5), (3,4)]
-L_g2 = [(4,5), (1,4), (1,5), (3,4)]
-cut_lines = [(1,4), (1,5), (3,4)]
-smax = Dict((1, 2) => 4.0, (4, 5) => 2.4)
+N_g1 = [1, 2, 4, 8, 9]
+N_g2 = [3, 5, 6, 7]
+lines = [(data["branch"]["$(i)"]["f_bus"], data["branch"]["$(i)"]["t_bus"]) for i in 1:L]
+L_g1 = [i for i in lines if i[1] in N_g1 || i[2] in N_g1]
+L_g1 = [i for i in lines if i[1] in N_g2 || i[2] in N_g2]
+smax = Dict()
+for i in 1:L
+    if "rate_a" in keys(data["branch"]["$(i)"])
+        smax[(data["branch"]["$(i)"]["f_bus"], data["branch"]["$(i)"]["t_bus"])] = data["branch"]["$(i)"]["rate_a"]
+    end
+end
 
 # build model
 dm = Model()
@@ -126,28 +147,55 @@ end
 
 # constraints 1d, 1e for each node
 for i in N_g1
-    @constraint(dm, sum(plf1[j] for j in L_g1 if j[1] == i)
-                 + sum(plt1[j] for j in L_g1 if j[2] == i)
-                 - sum(pg[j] for j in 1:N_gen if gen_bus[j] == i)
-                 + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) == 0)
+    if i in shunt_node
+        @constraint(dm, sum(plf1[j] for j in L_g1 if j[1] == i)
+                     + sum(plt1[j] for j in L_g1 if j[2] == i)
+                     - sum(pg1[j] for j in 1:N_gen if gen_bus[j] == i)
+                     + sum(Pd[j] for j in 1:N_load if load_bus[j] == i)
+                     - gs[i] * (W1[i,i] + W1[i+N,i+N]) == 0)
+        @constraint(dm, sum(qlf1[j] for j in L_g1 if j[1] == i)
+                     + sum(qlt1[j] for j in L_g1 if j[2] == i)
+                     - sum(qg[j] for j in 1:N_gen if gen_bus[j] == i)
+                     + sum(Qd[j] for j in 1:N_load if load_bus[j] == i)
+                     - bs[i] * (W1[i,i] + W1[i+N,i+N]) == 0)
+    else
+        @constraint(dm, sum(plf1[j] for j in L_g1 if j[1] == i)
+                     + sum(plt1[j] for j in L_g1 if j[2] == i)
+                     - sum(pg[j] for j in 1:N_gen if gen_bus[j] == i)
+                     + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) == 0)
 
-    @constraint(dm, sum(qlf1[j] for j in L_g1 if j[1] == i)
-                 + sum(qlt1[j] for j in L_g1 if j[2] == i)
-                 - sum(qg[j] for j in 1:N_gen if gen_bus[j] == i)
-                 + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) == 0)
+        @constraint(dm, sum(qlf1[j] for j in L_g1 if j[1] == i)
+                     + sum(qlt1[j] for j in L_g1 if j[2] == i)
+                     - sum(qg[j] for j in 1:N_gen if gen_bus[j] == i)
+                     + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) == 0)
+    end
 end
 
 for i in N_g2
-    @constraint(dm, sum(plf2[j] for j in L_g2 if j[1] == i)
-                 + sum(plt2[j] for j in L_g2 if j[2] == i)
-                 - sum(pg[j] for j in 1:N_gen if gen_bus[j] == i)
-                 + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) == 0)
+    if i in shunt_node
+        @constraint(dm, sum(plf2[j] for j in L_g2 if j[1] == i)
+                     + sum(plt2[j] for j in L_g2 if j[2] == i)
+                     - sum(pg[j] for j in 1:N_gen if gen_bus[j] == i)
+                     + sum(Pd[j] for j in 1:N_load if load_bus[j] == i)
+                     - gs[i] * (W2[i,i] + W2[i+N,i+N]) == 0)
+        @constraint(dm, sum(qlf2[j] for j in L_g2 if j[1] == i)
+                     + sum(qlt2[j] for j in L_g2 if j[2] == i)
+                     - sum(qg[j] for j in 1:N_gen if gen_bus[j] == i)
+                     + sum(Qd[j] for j in 1:N_load if load_bus[j] == i)
+                     - bs[i] * (W2[i,i] + W2[i+N,i+N]) == 0)
+    else
+        @constraint(dm, sum(plf2[j] for j in L_g2 if j[1] == i)
+                     + sum(plt2[j] for j in L_g2 if j[2] == i)
+                     - sum(pg[j] for j in 1:N_gen if gen_bus[j] == i)
+                     + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) == 0)
 
-    @constraint(dm, sum(qlf2[j] for j in L_g2 if j[1] == i)
-                 + sum(qlt2[j] for j in L_g2 if j[2] == i)
-                 - sum(qg[j] for j in 1:N_gen if gen_bus[j] == i)
-                 + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) == 0)
+        @constraint(dm, sum(qlf2[j] for j in L_g2 if j[1] == i)
+                     + sum(qlt2[j] for j in L_g2 if j[2] == i)
+                     - sum(qg[j] for j in 1:N_gen if gen_bus[j] == i)
+                     + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) == 0)
+    end
 end
+
 
 # constraints 1b, 1c
 cref_type_list = list_of_constraint_types(pm.model)
@@ -247,7 +295,9 @@ for i in L_g2
 end
 
 # objective
-@objective(dm, Min, sum(c .* pg))
+if gen_cost_type == 2
+    @objective(dm, Min, sum( sum(costs[i][j] * pg[i]^(length(costs[i])-j) for j in 1:length(costs[i])) for i in 1:N_gen))
+end
 
 # optimize
 set_optimizer(dm, Gurobi.Optimizer)

@@ -35,7 +35,7 @@ function get_index_from_var_name(str::String)::Tuple
     return (first_idx, second_idx, third_idx)
 end
 
-file = "case9.m"
+file = "case5.m"
 data = parse_matpower(file)
 pm = instantiate_model(file, ACRPowerModel, PowerModels.build_opf)
 
@@ -90,7 +90,6 @@ end
 dm = Model()
 # W variables
 @variable(dm, W[1:2*N, 1:2*N])
-#@variable(dm, W[1:2*N, 1:2*N], Symmetric) # Symmetric is needed for SOCP relaxation
 
 # Original: Exact rank-1 feasible set for W
 @variable(dm, v[1:2*N])
@@ -99,28 +98,8 @@ for i in 1:2*N, j in 1:2*N
 end
 
 # reference bus (from PowerModels.jl model)
-ref_bus = 4;
+ref_bus = 1;
 @constraint(dm, v[ref_bus+N] == 0)
-# @constraint(dm, W[ref_bus+N, ref_bus+N] == 0)
-# for i in 1:2*N
-#     if i != ref_bus+N
-#         @constraint(dm, W[ref_bus+N, i] == 0)
-#         @constraint(dm, W[i, ref_bus+N] == 0)
-#     end
-# end
-# SDP relaxation
-#@constraint(dm, W in PSDCone())
-
-# SOCP relaxation
-for line in lines
-    i = line[1]
-    j = line[2]
-    @constraint(dm, [W[i,i] + W[i+N,i+N] + W[j,j] + W[j+N, j+N],
-                     W[i,i] + W[i+N,i+N] - W[j,j] - W[j+N, j+N],
-                     2*(W[i,j] + W[i+N,j+N]),
-                     2*(W[j,i+N] - W[i,j+N])] in SecondOrderCone())
-    #@constraint(dm, (W[i,i] + W[i+N,i+N] - W[j,j] - W[j+N, j+N])^2 + (2*(W[i,j] + W[i+N,j+N]))^2 + (2*(W[j,i+N] - W[i,j+N]))^2 <= (W[i,i] + W[i+N,i+N] + W[j,j] + W[j+N, j+N])^2)
-end
 
 # Other decision variables
 @variable(dm, plf[lines])
@@ -222,23 +201,8 @@ for i in lines
     end
 end
 
-# extra constraints from PowerModels.jl
-# Seem to be inactive all the time...
-#=
-b = 1.732060602824032
-for line in lines
-    i = line[1]
-    j = line[2]
-    @constraint(dm, W[i+N,j] - W[i,j+N] + b * W[i,j] + b * W[i+N,j+N] >= 0)
-    @constraint(dm, W[i+N,j] - W[i,j+N] - b * W[i,j] - b * W[i+N,j+N] <= 0)
-end
-=#
-
-# objective
-#@objective(dm, Min, sum(c .* pg))
-if gen_cost_type == 2
-    @objective(dm, Min, sum( sum(costs[i][j] * pg[i]^(length(costs[i])-j) for j in 1:length(costs[i])) for i in 1:N_gen))
-end
+# objective (find a boundary point)
+@objective(dm, Max, plf[lines[2]])
 
 # optimize
 set_optimizer(dm, Gurobi.Optimizer)
