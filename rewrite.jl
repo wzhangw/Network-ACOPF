@@ -35,7 +35,7 @@ function get_index_from_var_name(str::String)::Tuple
     return (first_idx, second_idx, third_idx)
 end
 
-file = "case9.m"
+file = "case5.m"
 data = parse_matpower(file)
 pm = instantiate_model(file, ACRPowerModel, PowerModels.build_opf)
 
@@ -112,15 +112,15 @@ ref_bus = 4;
 #@constraint(dm, W in PSDCone())
 
 # SOCP relaxation
-for line in lines
-    i = line[1]
-    j = line[2]
-    @constraint(dm, [W[i,i] + W[i+N,i+N] + W[j,j] + W[j+N, j+N],
-                     W[i,i] + W[i+N,i+N] - W[j,j] - W[j+N, j+N],
-                     2*(W[i,j] + W[i+N,j+N]),
-                     2*(W[j,i+N] - W[i,j+N])] in SecondOrderCone())
-    #@constraint(dm, (W[i,i] + W[i+N,i+N] - W[j,j] - W[j+N, j+N])^2 + (2*(W[i,j] + W[i+N,j+N]))^2 + (2*(W[j,i+N] - W[i,j+N]))^2 <= (W[i,i] + W[i+N,i+N] + W[j,j] + W[j+N, j+N])^2)
-end
+# for line in lines
+#     i = line[1]
+#     j = line[2]
+#     @constraint(dm, [W[i,i] + W[i+N,i+N] + W[j,j] + W[j+N, j+N],
+#                      W[i,i] + W[i+N,i+N] - W[j,j] - W[j+N, j+N],
+#                      2*(W[i,j] + W[i+N,j+N]),
+#                      2*(W[j,i+N] - W[i,j+N])] in SecondOrderCone())
+#     #@constraint(dm, (W[i,i] + W[i+N,i+N] - W[j,j] - W[j+N, j+N])^2 + (2*(W[i,j] + W[i+N,j+N]))^2 + (2*(W[j,i+N] - W[i,j+N]))^2 <= (W[i,i] + W[i+N,i+N] + W[j,j] + W[j+N, j+N])^2)
+# end
 
 # Other decision variables
 @variable(dm, plf[lines])
@@ -241,8 +241,9 @@ if gen_cost_type == 2
 end
 
 # optimize
-set_optimizer(dm, Gurobi.Optimizer)
-set_optimizer_attribute(dm, "NonConvex", 2)
+#set_optimizer(dm, Gurobi.Optimizer)
+#set_optimizer_attribute(dm, "NonConvex", 2)
+set_optimizer(dm, Ipopt.Optimizer)
 
 # optimizer for PSD cone
 #set_optimizer(dm, COSMO.Optimizer)
