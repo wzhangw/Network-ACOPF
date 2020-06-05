@@ -84,20 +84,6 @@ function build_subgraph_model(
         @variable(nodes[k], Pmin[i] <= pg[i in gen_idx_k] <= Pmax[i])
         @variable(nodes[k], Qmin[i] <= qg[i in gen_idx_k] <= Qmax[i])
 
-        # fix free variables
-        #=
-        for i in 1:N
-            if !(i in N_gs[k]) && !any(j -> i in j, lines_in_cut)
-                @constraint(nodes[k], v[i] == 0)
-                @constraint(nodes[k], v[i+N] == 0)
-                for j in 1:2*N
-                    @constraint(nodes[k], W[i, 2*N] == 0)
-                    @constraint(nodes[k], W[2*N, i] == 0)
-                end
-            end
-        end
-        =#
-
         for i in 1:2*N, j in 1:2*N
             @constraint(nodes[k], W[i,j] == v[i] * v[j])
         end
@@ -180,7 +166,8 @@ function build_subgraph_model(
         end
 
         # constraints 1g
-        for i in N_gs[k]
+#        for i in N_gs[k]
+        for i in 1:N
             @constraint(nodes[k], Vmin[i]^2 <= W[i,i] + W[i+N, i+N] <= Vmax[i]^2)
         end
 
