@@ -1,0 +1,1899 @@
+================ Iteration 1 ================
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.7500000e+03 3.25e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  2.1756909e+02 8.33e-01 2.67e+01  -1.0 6.09e+00  -4.0 2.54e-01 7.44e-01f  1
+   2  2.1106480e+02 7.17e-01 1.21e+01  -1.0 2.66e+00   0.0 7.29e-01 1.38e-01h  1
+   3  2.1520875e+02 1.25e-01 5.90e+00  -1.0 2.49e+00   0.5 1.00e+00 8.26e-01h  1
+   4  2.1330966e+02 9.28e-04 7.06e-01  -1.0 6.30e-01    -  9.11e-01 1.00e+00f  1
+   5  2.1154015e+02 4.10e-02 4.15e-01  -1.7 2.97e-01    -  6.62e-01 1.00e+00h  1
+   6  2.1153927e+02 3.70e-02 1.35e-02  -1.7 2.19e-01    -  1.00e+00 1.00e+00h  1
+   7  2.1107733e+02 2.17e-02 1.92e-03  -2.5 1.48e-01    -  1.00e+00 1.00e+00h  1
+   8  2.1100408e+02 4.04e-03 1.29e-04  -3.8 6.35e-02    -  1.00e+00 1.00e+00h  1
+   9  2.1100405e+02 7.51e-07 4.12e-03  -3.8 4.24e-03  -0.0 1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  2.1100405e+02 9.12e-04 1.55e-04  -3.8 2.22e-01    -  1.00e+00 1.00e+00h  1
+  11  2.1100405e+02 1.67e-04 8.92e-06  -3.8 1.24e-01    -  1.00e+00 1.00e+00h  1
+  12  2.1100405e+02 8.25e-07 6.51e-09  -3.8 1.58e-02    -  1.00e+00 1.00e+00h  1
+  13  2.1100004e+02 7.81e-13 2.66e-10  -5.7 1.25e-05    -  1.00e+00 1.00e+00h  1
+  14  2.1099999e+02 3.55e-15 2.24e-08  -8.6 6.92e-08  -0.5 1.00e+00 1.00e+00h  1
+  15  2.1099999e+02 1.78e-15 6.46e-12  -9.0 5.99e-11  -1.0 1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 15
+
+                                   (scaled)                 (unscaled)
+Objective...............:   7.8148145490572434e+00    2.1099999282454559e+02
+Dual infeasibility......:   6.4634797143728691e-12    1.7451395228806746e-10
+Constraint violation....:   1.7763568394002505e-15    1.7763568394002505e-15
+Complementarity.........:   9.0909092298758703e-10    2.4545454920664851e-08
+Overall NLP error.......:   9.0909092298758703e-10    2.4545454920664851e-08
+
+
+Number of objective function evaluations             = 16
+Number of objective gradient evaluations             = 16
+Number of equality constraint evaluations            = 16
+Number of inequality constraint evaluations          = 16
+Number of equality constraint Jacobian evaluations   = 16
+Number of inequality constraint Jacobian evaluations = 16
+Number of Lagrangian Hessian evaluations             = 15
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.021
+Total CPU secs in NLP function evaluations           =      0.000
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0x2c9be6e5
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [5e+02, 5e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [5e-01, 1e+00]
+  QRHS range       [6e+00, 6e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 211
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 211
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.110000000000e+02, best bound 2.110000000000e+02, gap 0.0000%
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.6600000e+03 3.00e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  3.6045422e+02 4.33e+00 3.22e+01  -1.0 5.85e+00    -  5.26e-02 8.62e-01f  1
+   2  3.6535848e+02 3.96e+00 3.15e+01  -1.0 3.07e+00   2.0 1.65e-01 8.93e-02h  1
+   3  3.5732531e+02 3.14e+00 2.50e+01  -1.0 3.30e+00    -  1.55e-01 2.09e-01h  1
+   4  4.2122672e+02 9.92e-01 2.26e+01  -1.0 2.68e+00    -  3.43e-01 1.00e+00h  1
+   5  3.5769226e+02 1.61e-01 1.03e+00  -1.0 3.79e-01    -  1.00e+00 9.76e-01h  1
+   6  3.5987883e+02 1.41e-02 1.73e-01  -1.0 2.03e-01    -  8.70e-01 1.00e+00h  1
+   7  3.5742106e+02 5.19e-05 7.77e-04  -2.5 5.98e-02    -  1.00e+00 1.00e+00h  1
+   8  3.5725439e+02 1.06e-06 6.88e-06  -3.8 2.10e-03    -  1.00e+00 1.00e+00h  1
+   9  3.5725004e+02 9.62e-08 5.94e-08  -5.7 6.17e-04    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  3.5725000e+02 1.06e-09 7.97e-11  -8.6 6.69e-05    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 10
+
+                                   (scaled)                 (unscaled)
+Objective...............:   1.4009803788782298e+01    3.5724999661394861e+02
+Dual infeasibility......:   7.9731653706524568e-11    2.0331571695163765e-09
+Constraint violation....:   1.0644575915152998e-09    1.0644575915152998e-09
+Complementarity.........:   2.6425967823487782e-09    6.7386217949893847e-08
+Overall NLP error.......:   2.6425967823487782e-09    6.7386217949893847e-08
+
+
+Number of objective function evaluations             = 11
+Number of objective gradient evaluations             = 11
+Number of equality constraint evaluations            = 11
+Number of inequality constraint evaluations          = 11
+Number of equality constraint Jacobian evaluations   = 11
+Number of inequality constraint Jacobian evaluations = 11
+Number of Lagrangian Hessian evaluations             = 10
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.014
+Total CPU secs in NLP function evaluations           =      0.000
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0x2e2a450a
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [1e+02, 1e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [3e-01, 9e-01]
+  QRHS range       [2e+00, 9e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 357.25
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 357.25
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.572500000000e+02, best bound 3.572500000000e+02, gap 0.0000%
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.5700000e+03 3.00e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  6.2317885e+02 4.46e-01 2.98e+01  -1.0 6.29e+00  -4.0 5.43e-02 8.51e-01f  1
+   2  6.7138754e+02 3.57e-02 2.13e+02  -1.0 3.33e+00   1.8 2.26e-01 9.20e-01h  1
+   3  6.4707901e+02 2.31e-03 1.16e+01  -1.0 7.91e-01    -  2.92e-01 1.00e+00f  1
+   4  6.2071831e+02 4.55e-03 7.73e+00  -1.0 3.00e-01    -  9.39e-01 3.34e-01f  1
+   5  6.3520990e+02 1.19e-03 9.04e-01  -1.0 2.70e-01    -  1.00e+00 1.00e+00H  1
+   6  6.2513647e+02 1.12e-05 7.00e-01  -1.7 2.95e-02   1.4 1.00e+00 1.00e+00f  1
+   7  6.2054439e+02 2.35e-06 1.31e-01  -1.7 1.56e-02   0.9 1.00e+00 9.73e-01f  1
+   8  6.2055176e+02 1.51e-09 6.67e-04  -2.5 2.58e-04   0.4 1.00e+00 1.00e+00h  1
+   9  6.2050279e+02 3.98e-10 1.46e-04  -3.8 1.69e-04  -0.1 1.00e+00 1.00e+00f  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  6.2050003e+02 1.07e-12 2.73e-06  -5.7 9.50e-06  -0.5 1.00e+00 1.00e+00h  1
+  11  6.2050000e+02 2.66e-15 1.11e-08  -8.6 1.16e-07  -1.0 1.00e+00 1.00e+00h  1
+  12  6.2050000e+02 4.00e-15 9.07e-11  -9.0 2.84e-09  -1.5 1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 12
+
+                                   (scaled)                 (unscaled)
+Objective...............:   3.4093406434975023e+01    6.2049999711654550e+02
+Dual infeasibility......:   9.0723840937067232e-11    1.6511739050546238e-09
+Constraint violation....:   3.9968028886505635e-15    3.9968028886505635e-15
+Complementarity.........:   9.0909092435084623e-10    1.6545454823185402e-08
+Overall NLP error.......:   9.0909092435084623e-10    1.6545454823185402e-08
+
+
+Number of objective function evaluations             = 15
+Number of objective gradient evaluations             = 13
+Number of equality constraint evaluations            = 15
+Number of inequality constraint evaluations          = 15
+Number of equality constraint Jacobian evaluations   = 13
+Number of inequality constraint Jacobian evaluations = 13
+Number of Lagrangian Hessian evaluations             = 12
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.017
+Total CPU secs in NLP function evaluations           =      0.000
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0x258fb549
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [1e+02, 1e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [3e-01, 1e+00]
+  QRHS range       [2e+00, 6e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 620.5
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Explored 0 nodes (0 simplex iterations) in 0.00 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 620.5
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.205000000000e+02, best bound 6.205000000000e+02, gap 0.0000%
+Δλ l2 norm: 1.103646470149887
+================ Iteration 2 ================
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.7502585e+03 3.25e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  2.1574921e+02 4.10e+00 2.67e+01  -1.0 6.09e+00  -4.0 2.54e-01 7.44e-01f  1
+   2  2.0940565e+02 3.56e+00 1.40e+01  -1.0 2.57e+00   0.0 6.25e-01 1.40e-01h  1
+   3  2.1025901e+02 3.16e+00 3.63e+01  -1.0 2.53e+00   0.5 1.00e+00 1.21e-01h  1
+   4  2.1427622e+02 1.04e+00 2.61e+00  -1.0 2.91e+00    -  9.41e-01 1.00e+00h  1
+   5  2.1389175e+02 1.52e-01 1.68e+01  -1.0 3.90e-01    -  2.21e-01 1.00e+00h  1
+   6  2.1389336e+02 7.42e-03 2.45e-01  -1.0 9.68e-02    -  9.20e-01 1.00e+00h  1
+   7  2.1177234e+02 5.36e-03 2.41e-02  -1.7 7.32e-02    -  9.80e-01 1.00e+00h  1
+   8  2.1122034e+02 3.49e-04 6.84e-04  -3.8 5.75e-02    -  9.96e-01 1.00e+00h  1
+   9  2.1113759e+02 1.72e-02 5.71e-04  -5.7 1.14e+00    -  6.69e-01 9.87e-01h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  2.1114464e+02 2.28e-03 9.36e-05  -5.7 8.58e-01    -  9.49e-01 8.83e-01h  1
+  11  2.1114636e+02 3.08e-05 2.18e-06  -5.7 1.72e-01    -  1.00e+00 1.00e+00h  1
+  12  2.1114638e+02 8.57e-08 3.29e-09  -5.7 5.90e-03    -  1.00e+00 1.00e+00h  1
+  13  2.1114618e+02 3.87e-08 9.61e-07  -8.6 4.07e-03    -  1.00e+00 9.92e-01h  1
+  14  2.1114618e+02 3.82e-12 2.05e-12  -8.6 2.76e-05    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 14
+
+                                   (scaled)                 (unscaled)
+Objective...............:   7.8202289212210729e+00    2.1114618087296898e+02
+Dual infeasibility......:   2.0465365513366862e-12    5.5256486886090528e-11
+Constraint violation....:   3.8196711418803098e-12    3.8196711418803098e-12
+Complementarity.........:   2.5065735355406094e-09    6.7677485459596454e-08
+Overall NLP error.......:   2.5065735355406094e-09    6.7677485459596454e-08
+
+
+Number of objective function evaluations             = 15
+Number of objective gradient evaluations             = 15
+Number of equality constraint evaluations            = 15
+Number of inequality constraint evaluations          = 15
+Number of equality constraint Jacobian evaluations   = 15
+Number of inequality constraint Jacobian evaluations = 15
+Number of Lagrangian Hessian evaluations             = 14
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.019
+Total CPU secs in NLP function evaluations           =      0.000
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0x057e1340
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [3e-03, 5e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [5e-01, 1e+00]
+  QRHS range       [6e+00, 6e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 211.146
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 2.075201e+02, 98 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  207.52014    0   95  211.14619  207.52014  1.72%     -    0s
+     0     0  207.62612    0   95  211.14619  207.62612  1.67%     -    0s
+     0     0  210.18908    0   95  211.14619  210.18908  0.45%     -    0s
+     0     0  210.19335    0   97  211.14619  210.19335  0.45%     -    0s
+     0     0  210.45727    0  100  211.14619  210.45727  0.33%     -    0s
+     0     0  210.45727    0  100  211.14619  210.45727  0.33%     -    0s
+     0     0  210.45839    0  100  211.14619  210.45839  0.33%     -    0s
+     0     0  210.45839    0  100  211.14619  210.45839  0.33%     -    0s
+     0     0  210.46557    0   98  211.14619  210.46557  0.32%     -    0s
+     0     0  210.46557    0  100  211.14619  210.46557  0.32%     -    0s
+     0     0  210.46798    0  100  211.14619  210.46798  0.32%     -    0s
+     0     0  210.46798    0  100  211.14619  210.46798  0.32%     -    0s
+     0     0  210.46799    0  100  211.14619  210.46799  0.32%     -    0s
+     0     0  210.46799    0  100  211.14619  210.46799  0.32%     -    0s
+     0     0  210.46800    0  100  211.14619  210.46800  0.32%     -    0s
+     0     2  210.46800    0  100  211.14619  210.46800  0.32%     -    0s
+
+Cutting planes:
+  RLT: 43
+  BQP: 92
+
+Explored 2192 nodes (73940 simplex iterations) in 0.84 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 211.146
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.111461880053e+02, best bound 2.111306153170e+02, gap 0.0074%
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.6593014e+03 3.00e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  1.6304318e+03 9.07e+02 9.99e+01  -1.0 1.50e+11    -  5.26e-02 4.02e-10f 32
+   2  3.2784319e+02 2.99e+02 1.33e+01  -1.0 1.57e+01  -4.0 6.68e-02 8.80e-01h  1
+   3  3.2758327e+02 2.90e+02 1.16e+01  -1.0 9.67e+00   0.0 1.31e-01 2.78e-02h  1
+   4  3.2708516e+02 2.80e+02 1.06e+02  -1.0 9.58e+00   0.5 4.07e-01 3.79e-02h  1
+   5  3.2622692e+02 2.27e+02 9.40e+01  -1.0 9.44e+00  -0.0 8.39e-01 2.02e-01h  1
+   6  3.2463620e+02 1.44e+02 2.41e+01  -1.0 8.94e+00  -0.5 1.00e+00 4.23e-01h  1
+   7  3.5705914e+02 4.44e+01 3.78e+00  -1.0 5.70e+01    -  8.68e-01 1.00e+00h  1
+   8  3.5473190e+02 8.89e+00 1.20e+01  -1.0 2.98e+00    -  2.57e-01 1.00e+00h  1
+   9  3.5598312e+02 3.12e+00 5.14e-02  -1.0 3.65e+00    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  3.5916908e+02 1.33e+00 2.03e-02  -1.0 3.49e+00    -  1.00e+00 1.00e+00h  1
+  11  3.5973282e+02 1.82e-01 4.76e-03  -1.0 9.10e-01    -  1.00e+00 1.00e+00h  1
+  12  3.5743064e+02 7.84e-03 2.65e-03  -2.5 8.86e-02    -  1.00e+00 1.00e+00h  1
+  13  3.5720898e+02 1.84e-03 6.11e-03  -3.8 3.73e-01    -  8.71e-01 1.00e+00h  1
+  14  3.5709164e+02 1.50e-02 8.76e-04  -3.8 8.66e-01    -  1.00e+00 8.72e-01h  1
+  15  3.5709932e+02 7.83e-04 3.30e-05  -3.8 6.37e-01    -  1.00e+00 1.00e+00h  1
+  16  3.5710096e+02 2.11e-05 9.03e-07  -3.8 6.55e-02    -  1.00e+00 1.00e+00h  1
+  17  3.5707705e+02 8.61e-04 1.31e-04  -5.7 4.61e-01    -  8.64e-01 9.84e-01h  1
+  18  3.5707465e+02 3.15e-04 2.73e-04  -5.7 3.00e-01    -  1.00e+00 7.63e-01h  1
+  19  3.5707460e+02 3.69e-03 5.01e-04  -5.7 7.30e-02    -  1.00e+00 7.29e-01h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  20  3.5707478e+02 4.74e-07 4.70e-07  -5.7 6.86e-03    -  1.00e+00 1.00e+00h  1
+  21  3.5707455e+02 6.01e-06 1.15e-05  -8.6 7.30e-03    -  1.00e+00 9.50e-01h  1
+  22  3.5707454e+02 1.00e-10 1.07e-10  -8.6 8.58e-05    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 22
+
+                                   (scaled)                 (unscaled)
+Objective...............:   1.4002923100844313e+01    3.5707453907153001e+02
+Dual infeasibility......:   1.0710601416191734e-10    2.7312033611288922e-09
+Constraint violation....:   1.0009537643185240e-10    1.0009537643185240e-10
+Complementarity.........:   2.5421679581023246e-09    6.4825282931609283e-08
+Overall NLP error.......:   2.5421679581023246e-09    6.4825282931609283e-08
+
+
+Number of objective function evaluations             = 23
+Number of objective gradient evaluations             = 23
+Number of equality constraint evaluations            = 55
+Number of inequality constraint evaluations          = 55
+Number of equality constraint Jacobian evaluations   = 23
+Number of inequality constraint Jacobian evaluations = 23
+Number of Lagrangian Hessian evaluations             = 22
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.031
+Total CPU secs in NLP function evaluations           =      0.001
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0x7af6e9c5
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [8e-03, 1e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [3e-01, 9e-01]
+  QRHS range       [2e+00, 9e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 357.075
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 3.546373e+02, 183 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  354.63732    0  100  357.07454  354.63732  0.68%     -    0s
+     0     0  354.63809    0  100  357.07454  354.63809  0.68%     -    0s
+     0     0  355.96340    0   95  357.07454  355.96340  0.31%     -    0s
+     0     0  356.05260    0   97  357.07454  356.05260  0.29%     -    0s
+     0     0  356.05260    0   97  357.07454  356.05260  0.29%     -    0s
+     0     0  356.29250    0  100  357.07454  356.29250  0.22%     -    0s
+     0     0  356.29250    0  100  357.07454  356.29250  0.22%     -    0s
+     0     0  356.29519    0  100  357.07454  356.29519  0.22%     -    0s
+     0     0  356.29519    0  100  357.07454  356.29519  0.22%     -    0s
+     0     0  356.29534    0  100  357.07454  356.29534  0.22%     -    0s
+     0     0  356.29534    0  100  357.07454  356.29534  0.22%     -    0s
+     0     0  356.31435    0  100  357.07454  356.31435  0.21%     -    0s
+     0     0  356.32037    0  100  357.07454  356.32037  0.21%     -    0s
+     0     0  356.34496    0  100  357.07454  356.34496  0.20%     -    0s
+     0     0  356.34496    0  100  357.07454  356.34496  0.20%     -    0s
+     0     0  356.35445    0   96  357.07454  356.35445  0.20%     -    0s
+     0     0  356.35445    0  100  357.07454  356.35445  0.20%     -    0s
+     0     0  356.35445    0  100  357.07454  356.35445  0.20%     -    0s
+     0     0  356.35445    0  100  357.07454  356.35445  0.20%     -    0s
+     0     0  356.35445    0  100  357.07454  356.35445  0.20%     -    0s
+     0     2  356.35445    0  100  357.07454  356.35445  0.20%     -    0s
+* 1697    70              30     357.0745423  357.03973  0.01%  35.1    0s
+* 1698    70              29     357.0745423  357.03973  0.01%  35.1    0s
+
+Cutting planes:
+  RLT: 42
+  BQP: 72
+
+Explored 1867 nodes (64592 simplex iterations) in 0.81 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 3: 357.075 357.075 357.075
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.570745422746e+02, best bound 3.570562146102e+02, gap 0.0051%
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.5704401e+03 3.00e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  6.2344517e+02 1.51e+00 2.98e+01  -1.0 6.29e+00  -4.0 5.43e-02 8.52e-01f  1
+   2  6.2606538e+02 1.42e+00 3.06e+01  -1.0 3.34e+00   1.8 1.86e-01 6.09e-02h  1
+   3  6.2081322e+02 1.32e+00 2.85e+01  -1.0 2.24e+00    -  2.56e-01 6.47e-02h  1
+   4  6.2628130e+02 9.38e-01 1.91e+01  -1.0 2.51e+00    -  2.33e-01 2.93e-01f  1
+   5  6.2171678e+02 5.18e-01 1.13e+01  -1.0 2.61e+00    -  2.05e-01 4.51e-01h  1
+   6  6.2242280e+02 8.03e-02 1.48e+01  -1.0 1.48e+00    -  1.00e+00 1.00e+00h  1
+   7  6.2244689e+02 4.22e-03 1.21e+00  -1.0 7.27e-01    -  9.42e-01 1.00e+00h  1
+   8  6.2258007e+02 2.97e-03 2.42e-01  -1.0 1.18e+00    -  7.80e-01 9.23e-01H  1
+   9  6.2111221e+02 4.42e-02 5.11e-02  -1.7 2.12e-01    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  6.2065239e+02 1.28e-01 2.51e-02  -2.5 3.57e-01    -  9.76e-01 1.00e+00h  1
+  11  6.2054453e+02 1.43e-02 7.88e-03  -2.5 1.05e+00    -  8.15e-01 1.00e+00h  1
+  12  6.2058747e+02 2.31e-03 3.21e-04  -2.5 6.18e-01    -  1.00e+00 1.00e+00h  1
+  13  6.2059719e+02 2.16e-04 3.66e-05  -2.5 9.56e-02    -  1.00e+00 1.00e+00h  1
+  14  6.2048888e+02 2.05e-03 1.24e-03  -3.8 6.24e-01    -  9.19e-01 1.00e+00h  1
+  15  6.2043742e+02 1.92e-03 8.44e-05  -3.8 5.35e-01    -  1.00e+00 1.00e+00h  1
+  16  6.2044048e+02 1.11e-04 6.76e-05  -3.8 6.75e-02    -  1.00e+00 1.00e+00h  1
+  17  6.2044039e+02 3.46e-07 4.73e-07  -3.8 5.63e-03    -  1.00e+00 1.00e+00h  1
+  18  6.2042717e+02 3.59e-03 3.59e-05  -5.7 9.11e-02    -  8.78e-01 8.62e-01h  1
+  19  6.2042496e+02 3.08e-03 1.15e-04  -5.7 6.25e-02    -  9.24e-01 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  20  6.2042485e+02 1.48e-05 4.88e-06  -5.7 2.54e-02    -  1.00e+00 1.00e+00h  1
+  21  6.2042489e+02 1.18e-07 7.12e-08  -5.7 2.82e-03    -  1.00e+00 1.00e+00h  1
+  22  6.2042473e+02 4.07e-07 1.14e-05  -8.6 2.81e-03    -  9.97e-01 9.27e-01h  1
+  23  6.2042472e+02 7.37e-09 1.56e-09  -8.6 6.07e-04    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 23
+
+                                   (scaled)                 (unscaled)
+Objective...............:   3.4089270214090917e+01    6.2042471789645481e+02
+Dual infeasibility......:   1.5565964697761281e-09    2.8330055749925537e-08
+Constraint violation....:   7.3707169256920224e-09    7.3707169256920224e-09
+Complementarity.........:   3.6787242139436926e-09    6.6952780693775213e-08
+Overall NLP error.......:   7.3707169256920224e-09    6.6952780693775213e-08
+
+
+Number of objective function evaluations             = 26
+Number of objective gradient evaluations             = 24
+Number of equality constraint evaluations            = 26
+Number of inequality constraint evaluations          = 26
+Number of equality constraint Jacobian evaluations   = 24
+Number of inequality constraint Jacobian evaluations = 24
+Number of Lagrangian Hessian evaluations             = 23
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.031
+Total CPU secs in NLP function evaluations           =      0.001
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0x6d9f7b18
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [3e-03, 1e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [3e-01, 1e+00]
+  QRHS range       [2e+00, 6e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 620.425
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 6.176428e+02, 96 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  617.64285    0   95  620.42472  617.64285  0.45%     -    0s
+     0     0  617.69072    0  100  620.42472  617.69072  0.44%     -    0s
+     0     0  619.70457    0   95  620.42472  619.70457  0.12%     -    0s
+     0     0  619.74286    0  100  620.42472  619.74286  0.11%     -    0s
+     0     0  619.84350    0  100  620.42472  619.84350  0.09%     -    0s
+     0     0  619.84350    0  100  620.42472  619.84350  0.09%     -    0s
+     0     0  619.84468    0  100  620.42472  619.84468  0.09%     -    0s
+     0     0  619.84468    0  100  620.42472  619.84468  0.09%     -    0s
+     0     0  619.88772    0  100  620.42472  619.88772  0.09%     -    0s
+     0     0  619.88772    0  100  620.42472  619.88772  0.09%     -    0s
+     0     0  619.91593    0  100  620.42472  619.91593  0.08%     -    0s
+     0     0  619.91593    0  100  620.42472  619.91593  0.08%     -    0s
+     0     0  619.91599    0  100  620.42472  619.91599  0.08%     -    0s
+     0     0  619.91599    0  100  620.42472  619.91599  0.08%     -    0s
+     0     0  619.91602    0  100  620.42472  619.91602  0.08%     -    0s
+     0     2  619.91602    0  100  620.42472  619.91602  0.08%     -    0s
+
+Cutting planes:
+  RLT: 36
+  BQP: 58
+
+Explored 1365 nodes (55110 simplex iterations) in 0.58 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 620.425
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.204247207508e+02, best bound 6.203712320175e+02, gap 0.0086%
+Δλ l2 norm: 1.860096200239621
+================ Iteration 3 ================
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.7501380e+03 3.25e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  2.1817713e+02 8.32e-01 2.67e+01  -1.0 6.07e+00  -4.0 2.56e-01 7.44e-01f  1
+   2  2.1168456e+02 7.17e-01 1.25e+01  -1.0 2.66e+00   0.0 7.05e-01 1.39e-01h  1
+   3  2.1401679e+02 3.98e-01 3.25e+00  -1.0 2.48e+00   0.5 1.00e+00 4.45e-01h  1
+   4  2.1443978e+02 1.17e-02 1.05e+00  -1.0 1.53e+00    -  9.70e-01 1.00e+00h  1
+   5  2.1398846e+02 7.69e-02 1.14e+00  -1.0 2.35e+00    -  2.23e-01 4.61e-01f  1
+   6  2.1427485e+02 1.16e-02 1.78e-01  -1.0 1.35e+00    -  1.00e+00 1.00e+00f  1
+   7  2.1429050e+02 5.88e-03 1.47e-02  -1.0 1.33e+00    -  1.00e+00 1.00e+00h  1
+   8  2.1153310e+02 1.46e-01 8.55e-03  -2.5 3.82e-01    -  9.96e-01 1.00e+00h  1
+   9  2.0867023e+02 6.36e+00 1.45e-02  -2.5 4.19e+00    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  2.0898701e+02 4.15e+00 5.80e-01  -2.5 2.10e+00  -0.0 2.98e-01 2.84e-01h  1
+  11  2.0900807e+02 4.50e+00 5.70e-01  -2.5 4.35e+01    -  6.18e-03 1.75e-02h  2
+  12  2.0902539e+02 4.40e+00 1.33e+00  -2.5 1.69e+00  -0.5 1.00e+00 1.86e-02h  1
+  13  2.0903847e+02 4.81e+00 9.91e-01  -2.5 9.44e+01    -  1.61e-02 4.37e-03h  2
+  14  2.0915613e+02 4.22e+00 9.84e-01  -2.5 3.19e+00    -  1.00e+00 1.94e-01h  1
+  15  2.0978515e+02 3.85e-01 6.44e-01  -2.5 1.91e+00    -  8.05e-01 1.00e+00h  1
+  16  2.0988486e+02 7.28e-03 1.03e-01  -2.5 4.94e-01    -  7.15e-01 1.00e+00h  1
+  17  2.0990232e+02 3.62e-03 5.86e-02  -2.5 1.02e+00    -  4.37e-01 5.55e-01H  1
+  18  2.1001302e+02 1.69e-02 3.17e-03  -2.5 5.35e-01    -  8.49e-01 1.00e+00h  1
+  19  2.0977486e+02 6.41e-02 1.04e-03  -3.8 9.42e-01    -  9.30e-01 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  20  2.0978967e+02 1.73e-03 2.74e-03  -3.8 3.07e-01    -  7.33e-01 1.00e+00h  1
+  21  2.0976627e+02 6.27e-05 3.12e-04  -3.8 2.24e-01    -  1.00e+00 1.00e+00h  1
+  22  2.0976857e+02 4.00e-06 2.30e-06  -3.8 8.65e-03    -  1.00e+00 1.00e+00h  1
+  23  2.0974989e+02 2.79e-03 1.29e-04  -5.7 2.00e-01    -  8.67e-01 9.11e-01h  1
+  24  2.0974801e+02 2.58e-04 1.89e-04  -5.7 1.45e-01    -  1.00e+00 8.60e-01h  1
+  25  2.0974783e+02 1.82e-05 1.05e-06  -5.7 2.73e-02    -  1.00e+00 1.00e+00h  1
+  26  2.0974785e+02 2.19e-08 1.07e-09  -5.7 1.36e-03    -  1.00e+00 1.00e+00h  1
+  27  2.0974760e+02 5.87e-07 5.16e-07  -8.6 6.17e-03    -  9.97e-01 9.90e-01h  1
+  28  2.0974760e+02 2.16e-10 1.87e-11  -8.6 8.43e-05    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 28
+
+                                   (scaled)                 (unscaled)
+Objective...............:   7.7684295986143663e+00    2.0974759916258790e+02
+Dual infeasibility......:   1.8672631149629915e-11    5.0416104104000770e-10
+Constraint violation....:   2.1618351553343018e-10    2.1618351553343018e-10
+Complementarity.........:   2.5082755059308281e-09    6.7723438660132366e-08
+Overall NLP error.......:   2.5082755059308281e-09    6.7723438660132366e-08
+
+
+Number of objective function evaluations             = 34
+Number of objective gradient evaluations             = 29
+Number of equality constraint evaluations            = 34
+Number of inequality constraint evaluations          = 34
+Number of equality constraint Jacobian evaluations   = 29
+Number of inequality constraint Jacobian evaluations = 29
+Number of Lagrangian Hessian evaluations             = 28
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.033
+Total CPU secs in NLP function evaluations           =      0.001
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0xd5771790
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [1e-02, 5e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [5e-01, 1e+00]
+  QRHS range       [6e+00, 6e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 209.748
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 2.074779e+02, 179 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  207.47785    0   98  209.74761  207.47785  1.08%     -    0s
+     0     0  207.48785    0  100  209.74761  207.48785  1.08%     -    0s
+     0     0  208.37587    0   95  209.74761  208.37587  0.65%     -    0s
+     0     0  208.76883    0   95  209.74761  208.76883  0.47%     -    0s
+     0     0  208.87563    0  100  209.74761  208.87563  0.42%     -    0s
+     0     0  208.87563    0  100  209.74761  208.87563  0.42%     -    0s
+     0     0  208.92235    0  100  209.74761  208.92235  0.39%     -    0s
+     0     0  208.92235    0  100  209.74761  208.92235  0.39%     -    0s
+     0     0  208.94267    0  100  209.74761  208.94267  0.38%     -    0s
+     0     0  208.94267    0  100  209.74761  208.94267  0.38%     -    0s
+     0     0  208.95593    0  100  209.74761  208.95593  0.38%     -    0s
+     0     0  208.95995    0  100  209.74761  208.95995  0.38%     -    0s
+     0     0  208.96062    0  100  209.74761  208.96062  0.38%     -    0s
+     0     0  208.96062    0  100  209.74761  208.96062  0.38%     -    0s
+     0     0  208.96095    0  100  209.74761  208.96095  0.38%     -    0s
+     0     0  208.96095    0  100  209.74761  208.96095  0.38%     -    0s
+     0     0  208.96103    0  100  209.74761  208.96103  0.38%     -    0s
+     0     2  208.96103    0  100  209.74761  208.96103  0.38%     -    0s
+ 11425  1131  209.73036   37   81  209.74761  209.64721  0.05%  37.8    5s
+
+Cutting planes:
+  RLT: 15
+  BQP: 29
+
+Explored 19618 nodes (607258 simplex iterations) in 7.91 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 209.748
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.097476062948e+02, best bound 2.097306404783e+02, gap 0.0081%
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.6601712e+03 3.00e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  1.6580119e+03 1.09e+03 9.99e+01  -1.0 1.03e+10    -  5.27e-02 6.43e-09f 28
+   2  3.6019116e+02 3.54e+02 1.33e+01  -1.0 1.70e+01  -4.0 6.77e-02 8.80e-01h  1
+   3  3.5998860e+02 3.43e+02 1.15e+01  -1.0 1.04e+01   0.0 1.46e-01 3.15e-02h  1
+   4  3.5970360e+02 3.29e+02 9.80e+01  -1.0 1.03e+01   0.5 4.29e-01 4.23e-02h  1
+   5  3.5952826e+02 2.61e+02 8.31e+01  -1.0 1.01e+01  -0.0 8.26e-01 2.22e-01h  1
+   6  3.5970551e+02 1.66e+02 2.09e+01  -1.0 9.19e+00  -0.5 1.00e+00 4.19e-01h  1
+   7  3.5992149e+02 5.06e+01 2.90e+00  -1.0 5.94e+01    -  8.77e-01 1.00e+00h  1
+   8  3.5908642e+02 1.37e+01 1.04e+01  -1.0 4.77e+00    -  2.77e-01 1.00e+00h  1
+   9  3.5956094e+02 3.26e+00 5.65e-02  -1.0 1.80e+00    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  3.5958872e+02 6.97e-01 1.38e-02  -1.0 8.35e-01    -  1.00e+00 1.00e+00h  1
+  11  3.5748145e+02 9.60e-02 8.63e-03  -1.7 3.10e-01    -  1.00e+00 1.00e+00h  1
+  12  3.5591651e+02 1.65e-02 8.77e-03  -2.5 1.25e+00    -  1.00e+00 1.00e+00h  1
+  13  3.5427412e+02 1.14e+00 5.90e-03  -2.5 3.87e+00    -  1.00e+00 1.00e+00h  1
+  14  3.5504409e+02 3.64e-02 3.83e-03  -2.5 1.32e+00    -  9.33e-01 1.00e+00h  1
+  15  3.5512701e+02 1.03e-02 3.17e-04  -2.5 1.21e-01    -  1.00e+00 1.00e+00h  1
+  16  3.5472133e+02 1.62e-02 9.44e-04  -3.8 1.06e+00    -  9.49e-01 1.00e+00h  1
+  17  3.5469364e+02 7.86e-03 7.15e-04  -3.8 9.86e-02    -  1.00e+00 8.66e-01h  1
+  18  3.5469819e+02 1.22e-04 2.39e-05  -3.8 2.83e-02    -  1.00e+00 1.00e+00f  1
+  19  3.5468158e+02 1.08e-04 2.92e-04  -5.7 2.75e-02    -  9.25e-01 7.88e-01h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  20  3.5467924e+02 3.24e-04 3.24e-05  -5.7 3.14e-02    -  1.00e+00 1.00e+00h  1
+  21  3.5467943e+02 5.89e-06 1.32e-06  -5.7 1.14e-02    -  1.00e+00 1.00e+00h  1
+  22  3.5467945e+02 1.07e-07 1.89e-08  -5.7 1.53e-03    -  1.00e+00 1.00e+00h  1
+  23  3.5467926e+02 3.28e-07 7.85e-07  -8.6 2.16e-03    -  9.96e-01 9.90e-01h  1
+  24  3.5467926e+02 9.51e-10 1.72e-10  -8.6 1.42e-04    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 24
+
+                                   (scaled)                 (unscaled)
+Objective...............:   1.3908990515547552e+01    3.5467925814646259e+02
+Dual infeasibility......:   1.7191474719485678e-10    4.3838260534688478e-09
+Constraint violation....:   9.5137975275605413e-10    9.5137975275605413e-10
+Complementarity.........:   2.7398408861904279e-09    6.9865942597855918e-08
+Overall NLP error.......:   2.7398408861904279e-09    6.9865942597855918e-08
+
+
+Number of objective function evaluations             = 25
+Number of objective gradient evaluations             = 25
+Number of equality constraint evaluations            = 53
+Number of inequality constraint evaluations          = 53
+Number of equality constraint Jacobian evaluations   = 25
+Number of inequality constraint Jacobian evaluations = 25
+Number of Lagrangian Hessian evaluations             = 24
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.033
+Total CPU secs in NLP function evaluations           =      0.001
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0x29c383d2
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [6e-03, 1e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [3e-01, 9e-01]
+  QRHS range       [2e+00, 9e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 354.679
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 3.534403e+02, 106 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  353.44104    0   95  354.67926  353.44104  0.35%     -    0s
+     0     0  353.44121    0   94  354.67926  353.44121  0.35%     -    0s
+     0     0  353.81903    0   95  354.67926  353.81903  0.24%     -    0s
+     0     0  354.02618    0  100  354.67926  354.02618  0.18%     -    0s
+     0     0  354.12632    0  100  354.67926  354.12632  0.16%     -    0s
+     0     0  354.12632    0  100  354.67926  354.12632  0.16%     -    0s
+     0     0  354.13077    0  100  354.67926  354.13077  0.15%     -    0s
+     0     0  354.13077    0  100  354.67926  354.13077  0.15%     -    0s
+     0     0  354.14258    0  100  354.67926  354.14258  0.15%     -    0s
+     0     0  354.14258    0  100  354.67926  354.14258  0.15%     -    0s
+     0     0  354.14274    0   98  354.67926  354.14274  0.15%     -    0s
+     0     0  354.14289    0  100  354.67926  354.14289  0.15%     -    0s
+     0     0  354.14494    0  100  354.67926  354.14494  0.15%     -    0s
+     0     2  354.14494    0  100  354.67926  354.14494  0.15%     -    0s
+ 12314   716  354.66803   32   36  354.67926  354.61850  0.02%  36.7    5s
+
+Cutting planes:
+  RLT: 12
+  BQP: 21
+
+Explored 14139 nodes (495424 simplex iterations) in 5.37 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 354.679
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.546792615323e+02, best bound 3.546438743427e+02, gap 0.0100%
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.5696908e+03 3.00e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  6.2403448e+02 4.57e-01 2.96e+01  -1.0 6.29e+00  -4.0 5.43e-02 8.52e-01f  1
+   2  6.3068883e+02 3.89e-01 3.26e+01  -1.0 3.32e+00   1.8 1.84e-01 1.48e-01h  1
+   3  6.2158629e+02 3.17e-01 2.67e+01  -1.0 3.12e+00    -  5.87e-01 1.87e-01h  1
+   4  6.3650737e+02 5.09e-02 2.24e+01  -1.0 2.59e+00    -  2.07e-01 1.00e+00h  1
+   5  6.2182835e+02 1.73e-02 5.38e+00  -1.0 1.21e-01    -  1.00e+00 6.67e-01h  1
+   6  6.2374687e+02 4.47e-03 2.93e-01  -1.0 1.16e-01    -  1.00e+00 1.00e+00f  1
+   7  6.2194460e+02 7.65e-02 8.23e-02  -1.7 2.77e-01    -  1.00e+00 1.00e+00h  1
+   8  6.2121642e+02 1.26e-02 7.62e-03  -2.5 7.76e-01    -  1.00e+00 1.00e+00h  1
+   9  6.2010455e+02 2.05e+00 6.93e-03  -2.5 4.19e+00    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  6.2059740e+02 2.02e-02 1.37e-03  -2.5 1.37e+00    -  1.00e+00 1.00e+00h  1
+  11  6.2067925e+02 1.83e-02 2.69e-04  -2.5 2.64e-01    -  1.00e+00 1.00e+00h  1
+  12  6.2041000e+02 1.01e-02 1.10e-03  -3.8 1.58e+00    -  9.33e-01 1.00e+00h  1
+  13  6.2036416e+02 2.96e-02 2.22e-04  -3.8 4.67e-01    -  1.00e+00 8.67e-01h  1
+  14  6.2036932e+02 3.44e-04 9.55e-05  -3.8 8.13e-02    -  1.00e+00 1.00e+00h  1
+  15  6.2036797e+02 9.49e-06 5.26e-06  -3.8 2.38e-02    -  1.00e+00 1.00e+00h  1
+  16  6.2035267e+02 1.87e-04 2.69e-04  -5.7 7.81e-02    -  9.12e-01 8.05e-01h  1
+  17  6.2035108e+02 3.89e-05 6.06e-04  -5.7 2.15e-02    -  1.00e+00 7.73e-01h  1
+  18  6.2035084e+02 1.01e-06 2.24e-06  -5.7 5.60e-03    -  1.00e+00 1.00e+00f  1
+  19  6.2035084e+02 1.00e-09 4.11e-10  -5.7 2.15e-04    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  20  6.2035068e+02 4.30e-08 1.70e-06  -8.6 8.97e-04    -  1.00e+00 9.88e-01h  1
+  21  6.2035067e+02 5.78e-12 2.61e-11  -8.6 1.48e-05    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 21
+
+                                   (scaled)                 (unscaled)
+Objective...............:   3.4085201888340485e+01    6.2035067436779696e+02
+Dual infeasibility......:   2.6094974271695381e-11    4.7492853174485602e-10
+Constraint violation....:   5.7795990215936399e-12    5.7795990215936399e-12
+Complementarity.........:   2.5119770672233055e-09    4.5717982623464166e-08
+Overall NLP error.......:   2.5119770672233055e-09    4.5717982623464166e-08
+
+
+Number of objective function evaluations             = 22
+Number of objective gradient evaluations             = 22
+Number of equality constraint evaluations            = 22
+Number of inequality constraint evaluations          = 22
+Number of equality constraint Jacobian evaluations   = 22
+Number of inequality constraint Jacobian evaluations = 22
+Number of Lagrangian Hessian evaluations             = 21
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.029
+Total CPU secs in NLP function evaluations           =      0.001
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0x55346b0b
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [6e-03, 1e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [3e-01, 1e+00]
+  QRHS range       [2e+00, 6e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 620.351
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 6.142469e+02, 93 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  614.24689    0  100  620.35068  614.24689  0.98%     -    0s
+     0     0  614.29685    0   99  620.35068  614.29685  0.98%     -    0s
+     0     0  619.46411    0   95  620.35068  619.46411  0.14%     -    0s
+     0     0  619.61466    0   96  620.35068  619.61466  0.12%     -    0s
+     0     0  619.77705    0  100  620.35068  619.77705  0.09%     -    0s
+     0     0  619.77705    0  100  620.35068  619.77705  0.09%     -    0s
+     0     0  619.78777    0  100  620.35068  619.78777  0.09%     -    0s
+     0     0  619.78777    0  100  620.35068  619.78777  0.09%     -    0s
+     0     0  619.79686    0  100  620.35068  619.79686  0.09%     -    0s
+     0     0  619.79770    0  100  620.35068  619.79770  0.09%     -    0s
+     0     0  619.79853    0  100  620.35068  619.79853  0.09%     -    0s
+     0     0  619.79853    0  100  620.35068  619.79853  0.09%     -    0s
+     0     0  619.79934    0  100  620.35068  619.79934  0.09%     -    0s
+     0     2  619.79934    0  100  620.35068  619.79934  0.09%     -    0s
+* 1494   209              39     620.3506745  619.98412  0.06%  60.3    1s
+* 1517   190              42     620.3506732  619.98412  0.06%  60.0    1s
+
+Cutting planes:
+  RLT: 12
+  BQP: 24
+
+Explored 7164 nodes (297655 simplex iterations) in 3.85 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 3: 620.351 620.351 620.351
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.203506731638e+02, best bound 6.203028583751e+02, gap 0.0077%
+Δλ l2 norm: 3.0179553091642015
+================ Iteration 4 ================
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.7494654e+03 3.25e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  2.1883663e+02 1.08e+00 2.66e+01  -1.0 6.10e+00  -4.0 2.53e-01 7.44e-01f  1
+   2  2.1245011e+02 9.29e-01 1.33e+01  -1.0 2.58e+00   0.0 6.61e-01 1.40e-01h  1
+   3  2.1380031e+02 7.22e-01 1.53e+01  -1.0 2.53e+00   0.5 1.00e+00 2.28e-01h  1
+   4  2.1603244e+02 1.53e-01 6.14e-01  -1.0 2.06e+00    -  9.76e-01 1.00e+00h  1
+   5  2.1355124e+02 8.94e-03 9.10e-01  -1.7 1.62e-01    -  5.76e-01 1.00e+00h  1
+   6  2.1324595e+02 9.71e-02 1.04e-01  -1.7 3.98e-01    -  8.47e-01 1.00e+00h  1
+   7  2.1247832e+02 1.65e-02 8.70e-03  -2.5 1.05e+00    -  9.96e-01 1.00e+00h  1
+   8  2.1208096e+02 1.53e-02 3.77e-03  -2.5 2.36e+00    -  1.00e+00 1.00e+00h  1
+   9  2.1217993e+02 4.17e-04 1.14e-04  -2.5 3.13e-01    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  2.1192598e+02 1.76e-02 2.22e-03  -3.8 1.46e+00    -  8.98e-01 1.00e+00h  1
+  11  2.1187742e+02 1.30e-03 2.18e-04  -3.8 2.33e-01    -  1.00e+00 9.92e-01h  1
+  12  2.1188452e+02 9.70e-05 1.41e-05  -3.8 9.27e-02    -  1.00e+00 1.00e+00h  1
+  13  2.1188435e+02 1.03e-06 1.12e-07  -3.8 6.70e-03    -  1.00e+00 1.00e+00h  1
+  14  2.1186635e+02 1.23e-04 2.28e-05  -5.7 5.52e-02    -  9.23e-01 9.36e-01h  1
+  15  2.1186554e+02 7.45e-05 3.43e-06  -5.7 5.88e-02    -  1.00e+00 1.00e+00h  1
+  16  2.1186559e+02 1.24e-05 8.85e-07  -5.7 2.20e-02    -  1.00e+00 1.00e+00h  1
+  17  2.1186560e+02 1.46e-06 1.11e-07  -5.7 7.60e-03    -  1.00e+00 1.00e+00h  1
+  18  2.1186560e+02 3.93e-08 3.01e-09  -5.7 1.25e-03    -  1.00e+00 1.00e+00h  1
+  19  2.1186539e+02 6.69e-06 2.75e-07  -8.6 9.26e-03    -  9.93e-01 9.95e-01h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  20  2.1186539e+02 8.54e-07 2.82e-08  -8.6 3.86e-03    -  1.00e+00 1.00e+00h  1
+  21  2.1186539e+02 1.95e-08 1.49e-09  -8.6 8.80e-04    -  1.00e+00 1.00e+00h  1
+  22  2.1186539e+02 6.62e-11 5.06e-12  -8.6 5.14e-05    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 22
+
+                                   (scaled)                 (unscaled)
+Objective...............:   7.8468663360525213e+00    2.1186539107341810e+02
+Dual infeasibility......:   5.0570797549553959e-12    1.3654115338379569e-10
+Constraint violation....:   6.6231575779340801e-11    6.6231575779340801e-11
+Complementarity.........:   2.5175188983100190e-09    6.7973010254370511e-08
+Overall NLP error.......:   2.5175188983100190e-09    6.7973010254370511e-08
+
+
+Number of objective function evaluations             = 23
+Number of objective gradient evaluations             = 23
+Number of equality constraint evaluations            = 23
+Number of inequality constraint evaluations          = 23
+Number of equality constraint Jacobian evaluations   = 23
+Number of inequality constraint Jacobian evaluations = 23
+Number of Lagrangian Hessian evaluations             = 22
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.028
+Total CPU secs in NLP function evaluations           =      0.001
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0x13bc8f97
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [2e-03, 5e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [5e-01, 1e+00]
+  QRHS range       [6e+00, 6e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 211.865
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 2.002834e+02, 239 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  200.28338    0  100  211.86540  200.28338  5.47%     -    0s
+     0     0  200.28364    0   98  211.86540  200.28364  5.47%     -    0s
+     0     0  209.07474    0   96  211.86540  209.07474  1.32%     -    0s
+     0     0  209.71610    0   96  211.86540  209.71610  1.01%     -    0s
+     0     0  209.86970    0  100  211.86540  209.86970  0.94%     -    0s
+     0     0  209.86970    0  100  211.86540  209.86970  0.94%     -    0s
+     0     0  209.89044    0  100  211.86540  209.89044  0.93%     -    0s
+     0     0  209.89044    0  100  211.86540  209.89044  0.93%     -    0s
+     0     0  209.89514    0  100  211.86540  209.89514  0.93%     -    0s
+     0     0  209.89514    0  100  211.86540  209.89514  0.93%     -    0s
+     0     0  209.89514    0  100  211.86540  209.89514  0.93%     -    0s
+     0     0  209.89514    0  100  211.86540  209.89514  0.93%     -    0s
+     0     0  209.89514    0  100  211.86540  209.89514  0.93%     -    0s
+     0     2  209.89514    0  100  211.86540  209.89514  0.93%     -    0s
+
+Cutting planes:
+  RLT: 13
+  BQP: 21
+
+Explored 10839 nodes (350950 simplex iterations) in 4.49 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 211.865
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.118653982055e+02, best bound 2.118534562542e+02, gap 0.0056%
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.6597933e+03 3.00e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  1.6426704e+03 1.79e+03 9.99e+01  -1.0 1.05e+11    -  5.26e-02 8.04e-10f 31
+   2  3.4255375e+02 5.80e+02 1.33e+01  -1.0 2.17e+01  -4.0 6.59e-02 8.80e-01h  1
+   3  3.4242508e+02 5.63e+02 1.15e+01  -1.0 1.30e+01   0.0 1.38e-01 2.98e-02h  1
+   4  3.4209612e+02 5.40e+02 9.66e+01  -1.0 1.29e+01   0.5 3.97e-01 4.08e-02h  1
+   5  3.4237801e+02 4.44e+02 8.79e+01  -1.0 1.26e+01  -0.0 8.44e-01 1.89e-01h  1
+   6  3.4322501e+02 2.92e+02 1.77e+01  -1.0 1.17e+01  -0.5 1.00e+00 3.87e-01h  1
+   7  3.6013567e+02 8.53e+01 1.95e+00  -1.0 7.91e+01    -  9.09e-01 1.00e+00h  1
+   8  3.6128380e+02 2.16e+01 9.80e+00  -1.0 4.65e+00    -  2.40e-01 1.00e+00h  1
+   9  3.6090746e+02 5.23e+00 5.83e-02  -1.0 2.29e+00    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  3.6095253e+02 1.14e+00 1.75e-02  -1.0 1.07e+00    -  1.00e+00 1.00e+00h  1
+  11  3.6095663e+02 3.24e-01 5.20e-03  -1.0 5.69e-01    -  1.00e+00 1.00e+00h  1
+  12  3.5875550e+02 1.94e-01 9.90e-03  -1.7 4.41e-01    -  1.00e+00 1.00e+00h  1
+  13  3.5708700e+02 8.58e-02 8.25e-03  -2.5 6.34e-01    -  1.00e+00 1.00e+00h  1
+  14  3.5614047e+02 2.59e-01 2.90e-03  -2.5 1.50e+00    -  1.00e+00 9.38e-01h  1
+  15  3.5654483e+02 6.73e-03 1.54e-03  -2.5 3.64e-01    -  1.00e+00 1.00e+00h  1
+  16  3.5654552e+02 8.31e-06 2.50e-05  -2.5 4.92e-02    -  1.00e+00 1.00e+00h  1
+  17  3.5623482e+02 1.61e-02 8.80e-04  -3.8 3.71e-01    -  9.30e-01 9.77e-01h  1
+  18  3.5622244e+02 1.00e-03 4.84e-04  -3.8 7.32e-02    -  1.00e+00 1.00e+00h  1
+  19  3.5622133e+02 9.83e-05 4.88e-05  -3.8 2.59e-02    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  20  3.5620437e+02 1.42e-04 2.94e-05  -5.7 2.56e-02    -  9.13e-01 9.25e-01h  1
+  21  3.5620407e+02 4.34e-06 6.45e-06  -5.7 8.42e-03    -  1.00e+00 1.00e+00h  1
+  22  3.5620409e+02 1.33e-09 1.11e-09  -5.7 8.75e-05    -  1.00e+00 1.00e+00h  1
+  23  3.5620390e+02 2.77e-08 2.38e-07  -8.6 3.45e-04    -  1.00e+00 9.95e-01h  1
+  24  3.5620390e+02 4.33e-13 9.72e-13  -8.6 3.07e-06    -  1.00e+00 1.00e+00f  1
+
+Number of Iterations....: 24
+
+                                   (scaled)                 (unscaled)
+Objective...............:   1.3968780508884032e+01    3.5620390297654285e+02
+Dual infeasibility......:   9.7244955143960254e-13    2.4797463561709865e-11
+Constraint violation....:   4.3276493499888602e-13    4.3276493499888602e-13
+Complementarity.........:   2.5060171806167676e-09    6.3903438105727579e-08
+Overall NLP error.......:   2.5060171806167676e-09    6.3903438105727579e-08
+
+
+Number of objective function evaluations             = 25
+Number of objective gradient evaluations             = 25
+Number of equality constraint evaluations            = 56
+Number of inequality constraint evaluations          = 56
+Number of equality constraint Jacobian evaluations   = 25
+Number of inequality constraint Jacobian evaluations = 25
+Number of Lagrangian Hessian evaluations             = 24
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.040
+Total CPU secs in NLP function evaluations           =      0.001
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0x0bdc3199
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [2e-03, 1e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [3e-01, 9e-01]
+  QRHS range       [2e+00, 9e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 356.204
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 3.512722e+02, 172 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  351.27222    0  100  356.20391  351.27222  1.38%     -    0s
+     0     0  351.37492    0  100  356.20391  351.37492  1.36%     -    0s
+     0     0  354.36032    0   98  356.20391  354.36032  0.52%     -    0s
+     0     0  354.73254    0   95  356.20391  354.73254  0.41%     -    0s
+     0     0  355.01209    0  100  356.20391  355.01209  0.33%     -    0s
+     0     0  355.01209    0   98  356.20391  355.01209  0.33%     -    0s
+     0     0  355.03167    0  100  356.20391  355.03167  0.33%     -    0s
+     0     0  355.03167    0  100  356.20391  355.03167  0.33%     -    0s
+     0     0  355.07232    0  100  356.20391  355.07232  0.32%     -    0s
+     0     0  355.07232    0   98  356.20391  355.07232  0.32%     -    0s
+     0     0  355.08147    0   98  356.20391  355.08147  0.32%     -    0s
+     0     0  355.08147    0  100  356.20391  355.08147  0.32%     -    0s
+     0     0  355.08240    0  100  356.20391  355.08240  0.31%     -    0s
+     0     0  355.08240    0  100  356.20391  355.08240  0.31%     -    0s
+     0     0  355.08261    0  100  356.20391  355.08261  0.31%     -    0s
+     0     2  355.08261    0  100  356.20391  355.08261  0.31%     -    0s
+* 9315   598              48     356.2038908  356.16668  0.01%  39.2    4s
+
+Cutting planes:
+  RLT: 20
+  BQP: 30
+
+Explored 9604 nodes (374150 simplex iterations) in 4.90 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 2: 356.204 356.204
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.562038907859e+02, best bound 3.561773540992e+02, gap 0.0074%
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.5707413e+03 3.00e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  6.2237105e+02 6.69e+00 3.01e+01  -1.0 6.29e+00  -4.0 5.42e-02 8.52e-01f  1
+   2  6.1966949e+02 6.57e+00 2.99e+01  -1.0 9.31e+00   0.9 1.09e-01 1.85e-02h  1
+   3  6.1974717e+02 6.45e+00 8.18e+01  -1.0 2.85e+00   1.4 2.29e-01 1.80e-02h  1
+   4  6.5300502e+02 5.78e+00 7.91e+01  -1.0 3.36e+00   0.9 2.93e-01 1.08e-01h  1
+   5  6.5254532e+02 5.69e+00 5.12e+02  -1.0 2.85e+00   1.3 8.51e-01 1.60e-02h  1
+   6  6.2042537e+02 2.68e+00 2.02e+02  -1.0 2.41e+00   0.8 6.35e-01 8.89e-01h  1
+   7  6.2194571e+02 7.41e-01 9.63e+01  -1.0 2.76e+00    -  8.22e-01 9.88e-01h  1
+   8  6.2264238e+02 1.14e-01 4.23e+01  -1.0 4.99e-01    -  4.55e-01 1.00e+00f  1
+   9  6.2339806e+02 1.30e-02 1.51e+01  -1.0 1.03e+00    -  4.52e-01 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  6.2317690e+02 1.72e-03 1.88e+00  -1.0 4.41e-01    -  9.13e-01 1.00e+00h  1
+  11  6.2317763e+02 7.22e-04 4.08e-01  -1.0 6.64e-02   0.4 8.87e-01 1.00e+00h  1
+  12  6.2166131e+02 5.48e-04 5.75e-02  -1.7 1.13e-01    -  9.95e-01 1.00e+00h  1
+  13  6.2129127e+02 8.51e-06 1.78e-02  -2.5 2.32e-02  -0.1 1.00e+00 1.00e+00h  1
+  14  6.1984303e+02 5.32e-01 2.09e-02  -3.8 7.29e-01    -  7.91e-01 1.00e+00f  1
+  15  6.1920814e+02 5.24e-01 2.08e-02  -3.8 1.00e+01    -  7.68e-01 1.20e-01h  1
+  16  6.1938314e+02 2.01e-01 1.19e-02  -3.8 1.00e+00    -  9.74e-01 1.00e+00h  1
+  17  6.1945344e+02 9.06e-02 1.08e-03  -3.8 4.17e-01    -  7.99e-01 1.00e+00h  1
+  18  6.1955536e+02 1.68e-03 1.49e-04  -3.8 8.15e-02    -  1.00e+00 1.00e+00h  1
+  19  6.1955625e+02 1.43e-06 1.76e-07  -3.8 4.96e-03    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  20  6.1954593e+02 6.41e-05 5.27e-05  -5.7 1.16e-01    -  9.69e-01 9.36e-01h  1
+  21  6.1954533e+02 3.02e-06 8.65e-07  -5.7 2.70e-02    -  1.00e+00 1.00e+00h  1
+  22  6.1954533e+02 4.73e-11 6.88e-11  -5.7 2.51e-04    -  1.00e+00 1.00e+00h  1
+  23  6.1954520e+02 1.89e-08 3.11e-09  -8.6 1.98e-03    -  1.00e+00 1.00e+00h  1
+  24  6.1954520e+02 5.28e-14 2.51e-14  -8.6 4.20e-06    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 24
+
+                                   (scaled)                 (unscaled)
+Objective...............:   3.4040944802891225e+01    6.1954519541262039e+02
+Dual infeasibility......:   2.5059815333960955e-14    4.5608863907808951e-13
+Constraint violation....:   5.2846615972157451e-14    5.2846615972157451e-14
+Complementarity.........:   2.5059065339416254e-09    4.5607498917737586e-08
+Overall NLP error.......:   2.5059065339416254e-09    4.5607498917737586e-08
+
+
+Number of objective function evaluations             = 25
+Number of objective gradient evaluations             = 25
+Number of equality constraint evaluations            = 25
+Number of inequality constraint evaluations          = 25
+Number of equality constraint Jacobian evaluations   = 25
+Number of inequality constraint Jacobian evaluations = 25
+Number of Lagrangian Hessian evaluations             = 24
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.032
+Total CPU secs in NLP function evaluations           =      0.001
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0xff9306ec
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [6e-02, 1e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [3e-01, 1e+00]
+  QRHS range       [2e+00, 6e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 619.545
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 6.134502e+02, 93 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  613.45017    0   95  619.54520  613.45017  0.98%     -    0s
+     0     0  613.56961    0  100  619.54520  613.56961  0.96%     -    0s
+     0     0  617.18656    0   95  619.54520  617.18656  0.38%     -    0s
+     0     0  617.66413    0  100  619.54520  617.66413  0.30%     -    0s
+     0     0  618.05550    0   98  619.54520  618.05550  0.24%     -    0s
+     0     0  618.05550    0  100  619.54520  618.05550  0.24%     -    0s
+     0     0  618.08277    0  100  619.54520  618.08277  0.24%     -    0s
+H    0     0                     619.5451970  618.08277  0.24%     -    0s
+     0     0  618.08277    0  100  619.54520  618.08277  0.24%     -    0s
+     0     0  618.10221    0  100  619.54520  618.10221  0.23%     -    0s
+     0     0  618.10221    0  100  619.54520  618.10221  0.23%     -    0s
+     0     0  618.10323    0   98  619.54520  618.10323  0.23%     -    0s
+     0     0  618.10323    0  100  619.54520  618.10323  0.23%     -    0s
+     0     0  618.10328    0  100  619.54520  618.10328  0.23%     -    0s
+     0     2  618.10328    0  100  619.54520  618.10328  0.23%     -    0s
+
+Cutting planes:
+  RLT: 16
+  BQP: 28
+
+Explored 6853 nodes (263137 simplex iterations) in 3.22 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 619.545
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.195451969911e+02, best bound 6.194866427994e+02, gap 0.0095%
+Δλ l2 norm: 2.1438454544058754
+================ Iteration 5 ================
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.7503856e+03 3.25e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  2.2008943e+02 8.31e-01 2.66e+01  -1.0 6.07e+00  -4.0 2.56e-01 7.44e-01f  1
+   2  2.1361311e+02 7.15e-01 1.22e+01  -1.0 2.68e+00   0.0 7.21e-01 1.39e-01h  1
+   3  2.1725060e+02 2.12e-01 4.92e+00  -1.0 2.48e+00   0.5 1.00e+00 7.04e-01h  1
+   4  2.1609124e+02 1.73e-03 9.60e-01  -1.0 9.24e-01    -  9.35e-01 1.00e+00f  1
+   5  2.1392186e+02 4.02e-02 2.84e-01  -1.7 3.66e-01    -  7.49e-01 1.00e+00h  1
+   6  2.1361527e+02 2.37e-02 4.25e-02  -1.7 5.68e-01    -  1.00e+00 1.00e+00h  1
+   7  2.1320126e+02 5.45e-05 1.20e-01  -2.5 1.23e-01  -0.0 1.00e+00 1.00e+00h  1
+   8  2.1315096e+02 5.07e-04 8.89e-03  -2.5 9.55e-02    -  1.00e+00 1.00e+00h  1
+   9  2.1307451e+02 1.28e-06 4.11e-03  -3.8 1.27e-02  -0.5 1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  2.1305850e+02 1.28e-05 3.52e-03  -3.8 3.26e-02  -1.0 1.00e+00 1.00e+00h  1
+  11  2.1301363e+02 9.89e-05 3.38e-03  -3.8 9.41e-02  -1.4 1.00e+00 1.00e+00h  1
+  12  2.1290046e+02 5.94e-04 3.03e-03  -3.8 2.53e-01  -1.9 1.00e+00 1.00e+00h  1
+  13  2.1266649e+02 3.02e-03 2.47e-03  -3.8 6.18e-01  -2.4 1.00e+00 1.00e+00h  1
+  14  2.1228180e+02 2.41e-02 1.78e-03  -3.8 1.34e+00  -2.9 1.00e+00 1.00e+00h  1
+  15  2.1160838e+02 1.19e+00 9.76e-03  -3.8 2.56e+00  -3.4 1.00e+00 1.00e+00h  1
+  16  2.1161708e+02 6.27e-01 7.78e-03  -3.8 7.49e-01  -2.9 1.00e+00 5.17e-01h  1
+  17  2.1149115e+02 1.91e-01 3.03e-03  -3.8 1.03e+00    -  1.00e+00 1.00e+00h  1
+  18  2.1154536e+02 5.15e-02 4.46e-04  -3.8 3.64e-01    -  1.00e+00 1.00e+00h  1
+  19  2.1155898e+02 1.04e-03 1.59e-05  -3.8 6.14e-02    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  20  2.1153829e+02 1.21e-03 9.20e-05  -5.7 1.32e-01    -  8.79e-01 9.10e-01h  1
+  21  2.1153707e+02 5.73e-06 6.71e-06  -5.7 1.34e-02    -  1.00e+00 1.00e+00h  1
+  22  2.1153711e+02 9.45e-09 5.39e-09  -5.7 9.66e-04    -  1.00e+00 1.00e+00h  1
+  23  2.1153686e+02 4.04e-08 6.85e-07  -8.6 7.12e-04    -  1.00e+00 9.90e-01h  1
+  24  2.1153686e+02 1.97e-12 1.68e-11  -8.6 2.60e-05    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 24
+
+                                   (scaled)                 (unscaled)
+Objective...............:   7.8346985511016580e+00    2.1153686087974478e+02
+Dual infeasibility......:   1.6797456654782383e-11    4.5353132967912435e-10
+Constraint violation....:   1.9719226251879718e-12    1.9719226251879718e-12
+Complementarity.........:   2.5086868416935236e-09    6.7734544725725141e-08
+Overall NLP error.......:   2.5086868416935236e-09    6.7734544725725141e-08
+
+
+Number of objective function evaluations             = 25
+Number of objective gradient evaluations             = 25
+Number of equality constraint evaluations            = 25
+Number of inequality constraint evaluations          = 25
+Number of equality constraint Jacobian evaluations   = 25
+Number of inequality constraint Jacobian evaluations = 25
+Number of Lagrangian Hessian evaluations             = 24
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.038
+Total CPU secs in NLP function evaluations           =      0.001
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0x99a692be
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [1e-02, 5e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [5e-01, 1e+00]
+  QRHS range       [6e+00, 6e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 211.537
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 2.004059e+02, 107 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  200.40586    0   95  211.53687  200.40586  5.26%     -    0s
+     0     0  200.54093    0   91  211.53687  200.54093  5.20%     -    0s
+     0     0  209.14793    0   96  211.53687  209.14793  1.13%     -    0s
+     0     0  209.80224    0   96  211.53687  209.80224  0.82%     -    0s
+     0     0  209.95539    0  100  211.53687  209.95539  0.75%     -    0s
+     0     0  209.95539    0  100  211.53687  209.95539  0.75%     -    0s
+     0     0  209.96420    0  100  211.53687  209.96420  0.74%     -    0s
+     0     0  209.96420    0  100  211.53687  209.96420  0.74%     -    0s
+     0     0  209.98043    0  100  211.53687  209.98043  0.74%     -    0s
+     0     0  209.98043    0  100  211.53687  209.98043  0.74%     -    0s
+     0     0  209.98044    0  100  211.53687  209.98044  0.74%     -    0s
+     0     0  209.98044    0  100  211.53687  209.98044  0.74%     -    0s
+     0     0  209.98044    0  100  211.53687  209.98044  0.74%     -    0s
+     0     2  209.98044    0  100  211.53687  209.98044  0.74%     -    0s
+ 11270   887     cutoff   34       211.53687  211.41114  0.06%  33.0    5s
+
+Cutting planes:
+  RLT: 12
+  BQP: 30
+
+Explored 18090 nodes (503695 simplex iterations) in 8.16 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 211.537
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.115368680119e+02, best bound 2.115209160930e+02, gap 0.0075%
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.6598629e+03 3.00e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  1.6383789e+03 2.70e+03 9.99e+01  -1.0 6.47e+10    -  5.26e-02 1.61e-09f 30
+   2  4.9600818e+02 5.54e+03 9.98e+01  -1.0 6.47e+09    -  6.70e-02 8.40e-07f 21
+   3  2.0326029e+02 6.55e+03 9.96e+01  -1.0 4.00e+09    -  1.49e-01 8.27e-07f 21
+   4  1.6719579e+02 2.63e+03 3.14e+01  -1.0 5.17e+03  -4.0 8.07e-02 8.76e-01h  1
+   5  1.6715202e+02 2.63e+03 3.14e+01  -1.0 7.26e+02   0.0 2.21e-03 2.05e-04h  1
+   6  1.6718472e+02 2.63e+03 3.98e+01  -1.0 7.14e+02  -0.4 1.04e-02 1.80e-03h  1
+   7  1.6739124e+02 2.62e+03 9.22e+01  -1.0 7.11e+02  -0.0 5.99e-03 3.02e-03h  1
+   8  1.7109823e+02 2.56e+03 4.38e+01  -1.0 7.10e+02  -0.5 3.56e-04 2.30e-02h  1
+   9  1.7185635e+02 2.55e+03 2.74e+03  -1.0 6.95e+02  -0.1 2.64e-01 4.99e-03h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  1.8851162e+02 2.30e+03 2.25e+04  -1.0 6.91e+02   0.4 8.74e-01 1.00e-01h  1
+  11  2.7113790e+02 1.33e+03 1.03e+04  -1.0 6.49e+02  -0.1 1.00e+00 5.02e-01h  1
+  12  3.0240525e+02 9.11e+02 6.62e+03  -1.0 4.28e+02    -  2.43e-01 3.54e-01h  1
+  13  3.4571840e+02 3.92e+02 1.63e+03  -1.0 2.79e+02    -  6.60e-01 7.53e-01h  1
+  14  3.4611177e+02 3.78e+02 1.57e+03  -1.0 7.32e+01    -  1.71e-01 3.68e-02h  1
+  15  3.6070983e+02 1.10e+02 1.03e+03  -1.0 7.07e+01    -  4.48e-01 1.00e+00h  1
+  16  3.6093796e+02 2.70e+01 2.74e+02  -1.0 5.20e+00  -0.6 7.28e-01 1.00e+00h  1
+  17  3.6137781e+02 7.89e+00 1.31e+02  -1.0 1.04e+01    -  5.42e-01 1.00e+00h  1
+  18  3.6143013e+02 2.78e+00 8.90e+00  -1.0 1.67e+00  -1.1 9.30e-01 1.00e+00h  1
+  19  3.6116491e+02 7.39e-01 2.01e+01  -1.0 2.85e+00    -  2.69e-01 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  20  3.6113723e+02 1.22e-01 1.33e+00  -1.0 8.77e-01  -1.5 8.65e-01 1.00e+00h  1
+  21  3.6121221e+02 1.36e-02 1.06e-01  -1.0 7.17e-01    -  9.13e-01 1.00e+00h  1
+  22  3.5892406e+02 1.12e-04 3.16e-03  -2.5 2.24e-01  -2.0 1.00e+00 1.00e+00h  1
+  23  3.5868973e+02 2.05e-03 5.43e-03  -3.8 1.42e-01  -2.5 8.83e-01 1.00e+00h  1
+  24  3.5849020e+02 3.87e-02 2.55e-03  -3.8 7.47e-01  -3.0 1.00e+00 1.00e+00h  1
+  25  3.5827163e+02 2.36e+00 1.34e-02  -3.8 1.62e+00  -3.5 1.00e+00 1.00e+00h  1
+  26  3.5830480e+02 1.63e+00 1.04e-02  -3.8 8.61e-01  -3.0 7.21e-01 3.47e-01h  1
+  27  3.5824635e+02 2.37e-01 3.88e-03  -3.8 1.20e+00    -  1.00e+00 1.00e+00h  1
+  28  3.5829597e+02 2.30e-02 4.84e-04  -3.8 5.11e-01    -  1.00e+00 1.00e+00h  1
+  29  3.5829985e+02 1.17e-03 1.15e-05  -3.8 3.42e-02    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  30  3.5828639e+02 7.62e-04 4.65e-05  -5.7 3.29e-01    -  9.02e-01 9.36e-01h  1
+  31  3.5828574e+02 1.58e-04 1.70e-04  -5.7 1.26e-01    -  1.00e+00 8.65e-01h  1
+  32  3.5828594e+02 3.64e-06 2.20e-07  -5.7 2.45e-02    -  1.00e+00 1.00e+00h  1
+  33  3.5828594e+02 4.22e-10 1.84e-11  -5.7 2.65e-04    -  1.00e+00 1.00e+00h  1
+  34  3.5828580e+02 2.76e-07 3.09e-07  -8.6 7.52e-03    -  9.97e-01 9.93e-01h  1
+  35  3.5828580e+02 5.53e-11 3.09e-12  -8.6 9.00e-05    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 35
+
+                                   (scaled)                 (unscaled)
+Objective...............:   1.4050423512396058e+01    3.5828579956609951e+02
+Dual infeasibility......:   3.0898061886830419e-12    7.8790057811417569e-11
+Constraint violation....:   5.5286886180283545e-11    5.5286886180283545e-11
+Complementarity.........:   2.5079754731885672e-09    6.3953374566308464e-08
+Overall NLP error.......:   2.5079754731885672e-09    6.3953374566308464e-08
+
+
+Number of objective function evaluations             = 36
+Number of objective gradient evaluations             = 36
+Number of equality constraint evaluations            = 108
+Number of inequality constraint evaluations          = 108
+Number of equality constraint Jacobian evaluations   = 36
+Number of inequality constraint Jacobian evaluations = 36
+Number of Lagrangian Hessian evaluations             = 35
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.073
+Total CPU secs in NLP function evaluations           =      0.002
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0x5527dc3c
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [1e-02, 1e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [3e-01, 9e-01]
+  QRHS range       [2e+00, 9e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 358.286
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 3.511706e+02, 299 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  351.17065    0   95  358.28580  351.17065  1.99%     -    0s
+     0     0  351.17170    0   98  358.28580  351.17170  1.99%     -    0s
+     0     0  356.27229    0   95  358.28580  356.27229  0.56%     -    0s
+     0     0  356.37127    0  100  358.28580  356.37127  0.53%     -    0s
+     0     0  356.45772    0  100  358.28580  356.45772  0.51%     -    0s
+     0     0  356.45772    0  100  358.28580  356.45772  0.51%     -    0s
+     0     0  356.46530    0  100  358.28580  356.46530  0.51%     -    0s
+     0     0  356.46530    0  100  358.28580  356.46530  0.51%     -    0s
+     0     0  356.47393    0  100  358.28580  356.47393  0.51%     -    0s
+     0     0  356.47393    0  100  358.28580  356.47393  0.51%     -    0s
+     0     0  356.47431    0  100  358.28580  356.47431  0.51%     -    0s
+     0     0  356.47431    0   98  358.28580  356.47431  0.51%     -    0s
+     0     0  356.47434    0  100  358.28580  356.47434  0.51%     -    0s
+     0     2  356.47434    0  100  358.28580  356.47434  0.51%     -    0s
+  9226  1541     cutoff   30       358.28580  357.71038  0.16%  34.7    5s
+ 20680  2646  358.27957   38   64  358.28580  358.07819  0.06%  27.9   10s
+ 33937  3350  358.23105   33  100  358.28580  358.19064  0.03%  24.3   15s
+ 47522  3748  358.28554   42   80  358.28580  358.23541  0.01%  22.2   20s
+
+Cutting planes:
+  RLT: 11
+  BQP: 28
+
+Explored 54954 nodes (1173311 simplex iterations) in 22.75 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 358.286
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.582858029519e+02, best bound 3.582508187079e+02, gap 0.0098%
+This is Ipopt version 3.13.2, running with linear solver mumps.
+NOTE: Other linear solvers might be more efficient (see Ipopt documentation).
+
+Number of nonzeros in equality constraint Jacobian...:      404
+Number of nonzeros in inequality constraint Jacobian.:       36
+Number of nonzeros in Lagrangian Hessian.............:      117
+
+Total number of variables............................:      128
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        2
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:      122
+Total number of inequality constraints...............:       18
+        inequality constraints with only lower bounds:        5
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:       13
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.5697515e+03 3.00e+00 1.00e+02  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  6.2513858e+02 8.55e-01 3.00e+01  -1.0 6.29e+00  -4.0 5.42e-02 8.53e-01f  1
+   2  6.2903454e+02 7.84e-01 3.06e+01  -1.0 3.33e+00   1.8 1.48e-01 8.37e-02h  1
+   3  6.2249039e+02 6.91e-01 2.69e+01  -1.0 3.09e+00    -  4.48e-01 1.19e-01h  1
+   4  6.3680680e+02 1.65e-01 2.37e+01  -1.0 2.81e+00    -  1.33e-01 1.00e+00h  1
+   5  6.2237997e+02 7.51e-02 9.56e+00  -1.0 5.41e-01    -  9.93e-01 5.48e-01h  1
+   6  6.2459143e+02 2.83e-03 6.46e-01  -1.0 1.84e-01    -  1.00e+00 1.00e+00h  1
+   7  6.2267590e+02 5.91e-03 5.04e-02  -1.7 8.31e-02    -  1.00e+00 1.00e+00h  1
+   8  6.2200079e+02 9.58e-02 1.53e-02  -2.5 4.78e-01    -  1.00e+00 1.00e+00h  1
+   9  6.2160763e+02 4.85e-02 2.45e-03  -2.5 1.09e+00    -  1.00e+00 1.00e+00h  1
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+  10  6.2173668e+02 2.38e-03 2.58e-04  -2.5 2.21e-01    -  1.00e+00 1.00e+00h  1
+  11  6.2157399e+02 8.33e-04 1.99e-03  -3.8 3.64e-01    -  8.77e-01 1.00e+00h  1
+  12  6.2155100e+02 1.16e-03 2.26e-04  -3.8 3.65e-01    -  1.00e+00 1.00e+00h  1
+  13  6.2155170e+02 2.17e-04 4.38e-05  -3.8 1.78e-01    -  1.00e+00 1.00e+00h  1
+  14  6.2155185e+02 2.25e-07 6.27e-08  -3.8 8.67e-03    -  1.00e+00 1.00e+00h  1
+  15  6.2154097e+02 2.39e-04 6.10e-05  -5.7 1.83e-01    -  9.16e-01 9.18e-01h  1
+  16  6.2154013e+02 4.92e-05 2.09e-05  -5.7 6.67e-02    -  1.00e+00 9.50e-01h  1
+  17  6.2154020e+02 6.13e-08 1.13e-07  -5.7 3.45e-03    -  1.00e+00 1.00e+00h  1
+  18  6.2154006e+02 1.06e-07 5.20e-08  -8.6 3.38e-03    -  9.99e-01 9.98e-01h  1
+  19  6.2154006e+02 1.45e-12 9.69e-13  -8.6 8.48e-06    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 19
+
+                                   (scaled)                 (unscaled)
+Objective...............:   3.4150552923341152e+01    6.2154006320480903e+02
+Dual infeasibility......:   9.6922470049776166e-13    1.7639889549059265e-11
+Constraint violation....:   1.4476198018087416e-12    1.4476198018087416e-12
+Complementarity.........:   2.5061330126111679e-09    4.5611620829523264e-08
+Overall NLP error.......:   2.5061330126111679e-09    4.5611620829523264e-08
+
+
+Number of objective function evaluations             = 20
+Number of objective gradient evaluations             = 20
+Number of equality constraint evaluations            = 20
+Number of inequality constraint evaluations          = 20
+Number of equality constraint Jacobian evaluations   = 20
+Number of inequality constraint Jacobian evaluations = 20
+Number of Lagrangian Hessian evaluations             = 19
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.032
+Total CPU secs in NLP function evaluations           =      0.001
+
+EXIT: Optimal Solution Found.
+Academic license - for non-commercial use only
+Academic license - for non-commercial use only
+Gurobi Optimizer version 9.0.2 build v9.0.2rc0 (linux64)
+Optimize a model with 11 rows, 133 columns and 29 nonzeros
+Model fingerprint: 0xf7da951e
+Model has 1 quadratic objective term
+Model has 124 quadratic constraints
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  QMatrix range    [1e+00, 1e+00]
+  QLMatrix range   [1e+00, 2e+01]
+  Objective range  [1e-02, 1e+02]
+  QObjective range [2e+03, 2e+03]
+  Bounds range     [1e-01, 3e+00]
+  RHS range        [3e-01, 1e+00]
+  QRHS range       [2e+00, 6e+00]
+Presolve removed 2 rows and 2 columns
+
+Continuous model is non-convex -- solving as a MIP.
+
+
+Loaded user MIP start with objective 621.54
+
+Presolve added 14 rows and 0 columns
+Presolve removed 0 rows and 2 columns
+Presolve time: 0.00s
+Presolved: 415 rows, 131 columns, 1255 nonzeros
+Presolved model has 1 quadratic objective terms
+Presolved model has 8 quadratic constraint(s)
+Presolved model has 100 bilinear constraint(s)
+Variable types: 131 continuous, 0 integer (0 binary)
+
+Root relaxation: objective 6.104923e+02, 233 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  610.49228    0  100  621.54007  610.49228  1.78%     -    0s
+     0     0  610.49307    0   97  621.54007  610.49307  1.78%     -    0s
+     0     0  620.02267    0   95  621.54007  620.02267  0.24%     -    0s
+     0     0  620.33806    0  100  621.54007  620.33806  0.19%     -    0s
+     0     0  620.46976    0  100  621.54007  620.46976  0.17%     -    0s
+     0     0  620.46976    0  100  621.54007  620.46976  0.17%     -    0s
+     0     0  620.47920    0  100  621.54007  620.47920  0.17%     -    0s
+     0     0  620.47920    0  100  621.54007  620.47920  0.17%     -    0s
+     0     0  620.47942    0  100  621.54007  620.47942  0.17%     -    0s
+     0     0  620.47942    0  100  621.54007  620.47942  0.17%     -    0s
+     0     0  620.47953    0  100  621.54007  620.47953  0.17%     -    0s
+     0     0  620.47953    0  100  621.54007  620.47953  0.17%     -    0s
+     0     0  620.47969    0  100  621.54007  620.47969  0.17%     -    0s
+     0     2  620.47969    0  100  621.54007  620.47969  0.17%     -    0s
+ 10011  1094  621.48474   28   81  621.54007  621.36974  0.03%  36.2    5s
+
+Cutting planes:
+  RLT: 14
+  BQP: 29
+
+Explored 16738 nodes (539910 simplex iterations) in 7.79 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 1: 621.54
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 6.215400660588e+02, best bound 6.214899414521e+02, gap 0.0081%
+Δλ l2 norm: 2.60261911789042
+================ End of Solution Process ================
+
+julia> solve_times
+15-element Array{Any,1}:
+  0.02428889274597168
+  0.01667499542236328
+  0.024055004119873047
+  0.857072114944458
+  0.8403642177581787
+  0.608494758605957
+  7.953077793121338
+  5.403652191162109
+  3.877664089202881
+  4.525934934616089
+  4.943339824676514
+  3.2564778327941895
+  8.200722217559814
+ 22.83205008506775
+  7.821771144866943
+
+julia> obj_vals
+5-element Array{Float64,1}:
+ 1188.75
+ 1180.4372059393322
+ 1188.2852778773076
+ 1188.4669094872547
+ 1187.955778502484 

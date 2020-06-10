@@ -1,4 +1,5 @@
-using PowerModels, JuMP, Ipopt, Gurobi, Plasmo, LinearAlgebra
+using PowerModels, JuMP, Ipopt, Gurobi, Plasmo, LinearAlgebra, MathOptInterface
+const MOI = MathOptInterface
 
 function get_index_from_var_name(str::String)::Tuple
     first_idx = 0
@@ -74,9 +75,11 @@ function build_subgraph_model(
     for k in 1:N_partitions
         gen_idx_k = [i for i in eachindex(gen_bus) if gen_bus[i] in N_gs[k]]
         lines_in_cut = intersect(L_gs[k], cut_lines)
+        relevant_idx = union(N_gs[k], vcat([collect(i) for i in L_gs[k]]...))
+        expanded_idx = union(relevant_idx, relevant_idx .+ N)
 
-        @variable(nodes[k], W[1:2*N, 1:2*N])
-        @variable(nodes[k], v[1:2*N])
+        @variable(nodes[k], W[expanded_idx, expanded_idx])
+        @variable(nodes[k], v[expanded_idx])
         @variable(nodes[k], plf[L_gs[k]])
         @variable(nodes[k], plt[L_gs[k]])
         @variable(nodes[k], qlf[L_gs[k]])
@@ -84,7 +87,7 @@ function build_subgraph_model(
         @variable(nodes[k], Pmin[i] <= pg[i in gen_idx_k] <= Pmax[i])
         @variable(nodes[k], Qmin[i] <= qg[i in gen_idx_k] <= Qmax[i])
 
-        for i in 1:2*N, j in 1:2*N
+        for i in expanded_idx, j in expanded_idx
             @constraint(nodes[k], W[i,j] == v[i] * v[j])
         end
 
@@ -167,7 +170,7 @@ function build_subgraph_model(
 
         # constraints 1g
 #        for i in N_gs[k]
-        for i in 1:N
+        for i in relevant_idx
             @constraint(nodes[k], Vmin[i]^2 <= W[i,i] + W[i+N, i+N] <= Vmax[i]^2)
         end
 
@@ -274,14 +277,11 @@ end
 
 # Partition data
 # ieee case 9
-N_g1 = [1, 2, 4, 8, 9]
-N_g2 = [3, 5, 6, 7]
-N_gs = [N_g1, N_g2]
+#N_gs = [[1, 2, 4, 8, 9], [3, 5, 6, 7]]
+N_gs = [[1,4,9],[3,5,6],[2,7,8]]
 N_partitions = length(N_gs)
 lines = [(data["branch"]["$(i)"]["f_bus"], data["branch"]["$(i)"]["t_bus"]) for i in 1:L]
-L_g1 = [i for i in lines if i[1] in N_g1 || i[2] in N_g1]
-L_g2 = [i for i in lines if i[1] in N_g2 || i[2] in N_g2]
-L_gs = [L_g1, L_g2]
+L_gs = [[i for i in lines if i[1] in N_g || i[2] in N_g] for N_g in N_gs]
 cut_lines = [i for i in lines if sum(i in L_gs[j] for j in 1:length(L_gs)) >= 2]
 smax = Dict()
 for i in 1:L
@@ -294,12 +294,15 @@ end
 # run the subgradient algorithm
 # TODO: implement subgradient method
 λ_dims = [length(intersect(i, cut_lines))*8 for i in L_gs]
-α = 0.1 # fixed step size for now
-lambdas = [(-1)^i * ones(Float64, i) for i in λ_dims]
+α = 0.5 # fixed step size for now
+lambdas = [zeros(Float64, i) for i in λ_dims]
 d_lambda_norm = 1000
 itr_count = 1
 max_itr = 2
 mg_and_dict = ()
+solve_times = []
+lambda_norms = []
+obj_vals = zeros(max_itr)
 
 while d_lambda_norm > 1e-6 && itr_count <= max_itr
     println("================ Iteration $(itr_count) ================")
@@ -307,10 +310,21 @@ while d_lambda_norm > 1e-6 && itr_count <= max_itr
                                                 Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
                                                 shunt_node, gs, bs, smax, pm.model, lambdas)
     mg, shared_vars_dict = mg_and_dict
-    for node in mg.modelnodes
+    for node_idx in 1:length(mg.modelnodes)-1
+        node = mg.modelnodes[node_idx]
+        set_start_value.(all_variables(node.model), 1)
+        JuMP.set_optimizer(node.model, Ipopt.Optimizer)
+        optimize!(node.model)
+        t1 = solve_time(node.model)
+
+        start_vals = value.(all_variables(node.model))
         JuMP.set_optimizer(node.model, Gurobi.Optimizer)
         set_optimizer_attributes(node.model, "NonConvex" => 2)
+        set_start_value.(all_variables(node.model), start_vals)
         optimize!(node.model)
+        t2 = solve_time(node.model)
+        append!(solve_times, t1 + t2)
+        global obj_vals[itr_count] += objective_value(node.model)
     end
     new_lambdas = [lambdas[k] - α * value.(shared_vars_dict[k]) for k in 1:N_partitions]
     # Projection for new_lambdas
@@ -344,15 +358,9 @@ while d_lambda_norm > 1e-6 && itr_count <= max_itr
         end
     end
     d_lambda_norm = norm(vcat(lambdas...) .- vcat(new_lambdas...))
+    append!(lambda_norms, d_lambda_norm)
     println("Δλ l2 norm: $(d_lambda_norm)")
-    println(new_lambdas)
     global lambdas = new_lambdas
     global itr_count += 1
 end
 println("================ End of Solution Process ================")
-#=
-mg, shared_vars_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
-                                            Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
-                                            shunt_node, gs, bs, smax, pm.model, lambdas)
-=#
-mg, shared_vars_dict = mg_and_dict
