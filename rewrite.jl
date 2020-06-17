@@ -240,17 +240,17 @@ if gen_cost_type == 2
 end
 
 # optimize
-set_start_value.(all_variables(dm), 1)
-set_optimizer(dm, Ipopt.Optimizer)
-optimize!(dm)
-t1 = solve_time(dm)
-
-start_vals = value.(all_variables(dm))
-set_optimizer(dm, Gurobi.Optimizer)
-set_optimizer_attribute(dm, "NonConvex", 2)
-set_start_value.(all_variables(dm), start_vals)
-optimize!(dm)
-t2 = solve_time(dm)
-
-println("Solution time: ", t1 + t2)
-println("Objective value: ", objective_value(dm))
+# set_start_value.(all_variables(dm), 1)
+# set_optimizer(dm, Ipopt.Optimizer)
+# optimize!(dm)
+# t1 = solve_time(dm)
+#
+# start_vals = value.(all_variables(dm))
+# set_optimizer(dm, Gurobi.Optimizer)
+# set_optimizer_attribute(dm, "NonConvex", 2)
+# set_start_value.(all_variables(dm), start_vals)
+# optimize!(dm)
+# t2 = solve_time(dm)
+#
+# println("Solution time: ", t1 + t2)
+# println("Objective value: ", objective_value(dm))
