@@ -198,15 +198,6 @@ function build_subgraph_model(
             shared_vars[8*(i-1)+7] = qlf[line]
             shared_vars[8*(i-1)+8] = qlt[line]
         end
-        # shared_vars = Vector{VariableRef}(undef, 4 * length(lines_in_cut))
-        # for i in eachindex(lines_in_cut)
-        #     line = lines_in_cut[i]
-        #     shared_vars[4*(i-1)+1] = W[line[1], line[2]]
-        #     shared_vars[4*(i-1)+2] = W[line[1], line[2]+N]
-        #     shared_vars[4*(i-1)+3] = W[line[1]+N, line[2]]
-        #     shared_vars[4*(i-1)+4] = W[line[1]+N, line[2]+N]
-        # end
-
         shared_vars_dict[k] = shared_vars
 
         # objective function
@@ -218,6 +209,39 @@ function build_subgraph_model(
     end
 
     return dm, shared_vars_dict
+end
+
+function lambda_projection(lambda::Vector{Vector{Float64}})
+    for line in cut_lines
+        f_bus = line[1]
+        t_bus = line[2]
+        k_f = 0
+        k_t = 0
+        f_idx_in_shared_var_list = 0
+        t_idx_in_shared_var_list = 0
+        for i in eachindex(N_gs)
+            if f_bus in N_gs[i]
+                k_f = i
+                lines_in_cut = intersect(L_gs[i], cut_lines)
+                f_idx_in_shared_var_list = first(findall(x->x==line, lines_in_cut))
+            end
+            if t_bus in N_gs[i]
+                k_t = i
+                lines_in_cut = intersect(L_gs[i], cut_lines)
+                t_idx_in_shared_var_list = first(findall(x->x==line, lines_in_cut))
+            end
+            if k_f != 0 && k_t != 0
+                break
+            end
+        end
+        for i in 1:8
+            a = lambda[k_f][8*(f_idx_in_shared_var_list-1)+i]
+            b = lambda[k_t][8*(t_idx_in_shared_var_list-1)+i]
+            lambda[k_f][8*(f_idx_in_shared_var_list-1)+i] = (a - b) / 2
+            lambda[k_t][8*(t_idx_in_shared_var_list-1)+i] = (b - a) / 2
+        end
+    end
+    return
 end
 
 # Main code
@@ -278,17 +302,13 @@ for i in 1:L
     end
 end
 
-
-# run the cutting plane algorithm
 λ_dims = [length(intersect(i, cut_lines))*8 for i in L_gs]
-# λ_dims = [length(intersect(i, cut_lines))*4 for i in L_gs]
-lambdas = [zeros(Float64, i) for i in λ_dims]
-itr_count = 1
-max_itr = 1
-mg_and_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
-                                   Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
-                                   shunt_node, gs, bs, smax, pm.model, lambdas)
-shared_vars_dict = mg_and_dict[2]
+#lambdas = [zeros(Float64, i) for i in λ_dims]
+#lambdas = [ones(Float64, i) for i in λ_dims]
+lambdas = [ones(Float64, 16), vcat(-ones(Float64, 8), ones(Float64, 8)), -ones(Float64, 16)]
+mg, shared_vars_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
+                                            Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
+                                            shunt_node, gs, bs, smax, pm.model, lambdas)
 lag_mp = Model(Gurobi.Optimizer)
 lag_θ = @variable(lag_mp, θ[1:length(N_gs)])
 lag_λ = [@variable(lag_mp, [eachindex(shared_vars_dict[i])], base_name = "λ$(i)") for i in eachindex(N_gs)]
@@ -300,201 +320,38 @@ stop_statuses = SortedDict()
 pg_vals = SortedDict()
 λs = Dict()
 
-# generate initial cuts for the lagrangian dual problem
-for line in cut_lines
-    f_bus = line[1]
-    t_bus = line[2]
-    k_f = 0
-    k_t = 0
-    f_idx_in_shared_var_list = 0
-    t_idx_in_shared_var_list = 0
-    for i in eachindex(N_gs)
-        if f_bus in N_gs[i]
-            k_f = i
-            lines_in_cut = intersect(L_gs[i], cut_lines)
-            f_idx_in_shared_var_list = first(findall(x->x==line, lines_in_cut))
-        end
-        if t_bus in N_gs[i]
-            k_t = i
-            lines_in_cut = intersect(L_gs[i], cut_lines)
-            t_idx_in_shared_var_list = first(findall(x->x==line, lines_in_cut))
-        end
-    end
-    for i in 1:8
-        curr_lambdas = [zeros(Float64, i) for i in λ_dims]
-        @constraint(lag_mp, lag_λ[k_f][8*(f_idx_in_shared_var_list-1)+i] + lag_λ[k_t][8*(t_idx_in_shared_var_list-1)+i] == 0)
-        curr_lambdas[k_f][8*(f_idx_in_shared_var_list-1)+i] = 10
-        curr_lambdas[k_t][8*(t_idx_in_shared_var_list-1)+i] = -10
-        for j in [1, -1]
-            curr_lambdas = curr_lambdas .* j
-            global mg, shared_vars_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
-                                                        Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
-                                                        shunt_node, gs, bs, smax, pm.model, curr_lambdas)
-            curr_obj_vals = Dict()
-            # solve each subproblem
-#            for node in mg.modelnodes
-            for j in [k_f, k_t]
-                node = mg.modelnodes[j]
-                set_start_value.(all_variables(node.model), 1)
-                JuMP.set_optimizer(node.model, Ipopt.Optimizer)
-                optimize!(node.model)
-
-                start_vals = value.(all_variables(node.model))
-                JuMP.set_optimizer(node.model, Gurobi.Optimizer)
-                set_optimizer_attributes(node.model, "NonConvex" => 2)
-                set_start_value.(all_variables(node.model), start_vals)
-                optimize!(node.model)
-#                append!(curr_obj_vals, objective_value(node.model))
-                @constraint(lag_mp, lag_θ[j] <= objective_value(node.model) - sum( value.(shared_vars_dict[j]) .* (lag_λ[j] - curr_lambdas[j]) ) )
-            end
-            # for i in [k_f, k_t]
-            #     @constraint(lag_mp, lag_θ[i] <= curr_obj_vals[i] + sum( value.(shared_vars_dict[i]) .* (lag_λ[i] - curr_lambdas[i]) ) )
-            # end
-        end
-    end
-end
-mg, shared_vars_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
-                                            Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
-                                            shunt_node, gs, bs, smax, pm.model, lambdas)
 curr_obj_vals = []
 for node in mg.modelnodes
-    set_start_value.(all_variables(node.model), 1)
-    JuMP.set_optimizer(node.model, Ipopt.Optimizer)
-    optimize!(node.model)
-
-    start_vals = value.(all_variables(node.model))
     JuMP.set_optimizer(node.model, Gurobi.Optimizer)
     set_optimizer_attributes(node.model, "NonConvex" => 2)
-    set_start_value.(all_variables(node.model), start_vals)
     optimize!(node.model)
     append!(curr_obj_vals, objective_value(node.model))
 end
-for i in 1:length(N_gs)
-    @constraint(lag_mp, lag_θ[i] <= curr_obj_vals[i] - sum( value.(shared_vars_dict[i]) .* (lag_λ[i] - lambdas[i]) ) )
+
+ϵ = 0.1
+lambdas_pos = [ϵ * value.(shared_vars_dict[i]) + lambdas[i] for i in 1:length(N_gs)]
+lambdas_neg = [-ϵ * value.(shared_vars_dict[i]) + lambdas[i] for i in 1:length(N_gs)]
+lambda_projection(lambdas_pos)
+lambda_projection(lambdas_neg)
+
+obj_vals_pos = []
+mg, shared_vars_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
+                                            Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
+                                            shunt_node, gs, bs, smax, pm.model, lambdas_pos)
+for node in mg.modelnodes
+    JuMP.set_optimizer(node.model, Gurobi.Optimizer)
+    set_optimizer_attributes(node.model, "NonConvex" => 2)
+    optimize!(node.model)
+    append!(obj_vals_pos, objective_value(node.model))
 end
-#optimize!(lag_mp)
 
-#=
-while itr_count <= max_itr
-    println("================================================ Iteration $(itr_count) ================================================")
-    λs[itr_count] = lambdas
-    global mg_and_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
-                                                Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
-                                                shunt_node, gs, bs, smax, pm.model, lambdas)
-    mg, shared_vars_dict = mg_and_dict
-    if itr_count == 1
-        for line in cut_lines
-            f_bus = line[1]
-            t_bus = line[2]
-            k_f = 0
-            k_t = 0
-            f_idx_in_shared_var_list = 0
-            t_idx_in_shared_var_list = 0
-            for i in eachindex(N_gs)
-                if f_bus in N_gs[i]
-                    k_f = i
-                    lines_in_cut = intersect(L_gs[i], cut_lines)
-                    f_idx_in_shared_var_list = first(findall(x->x==line, lines_in_cut))
-                end
-                if t_bus in N_gs[i]
-                    k_t = i
-                    lines_in_cut = intersect(L_gs[i], cut_lines)
-                    t_idx_in_shared_var_list = first(findall(x->x==line, lines_in_cut))
-                end
-                if k_f != 0 && k_t != 0
-                    break
-                end
-            end
-            for i in 1:8
-                @constraint(lag_mp, lag_λ[k_f][8*(f_idx_in_shared_var_list-1)+i] + lag_λ[k_t][8*(t_idx_in_shared_var_list-1)+i] == 0)
-                another_lambdas[k_f][8*(f_idx_in_shared_var_list-1)+i] = 1
-                another_lambdas[k_t][8*(t_idx_in_shared_var_list-1)+i] = -1
-            end
-            # for i in 1:4
-            #     @constraint(lag_mp, lag_λ[k_f][4*(f_idx_in_shared_var_list-1)+i] + lag_λ[k_t][4*(t_idx_in_shared_var_list-1)+i] == 0)
-            #     another_lambdas[k_f][4*(f_idx_in_shared_var_list-1)+i] = 1
-            #     another_lambdas[k_t][4*(t_idx_in_shared_var_list-1)+i] = -1
-            # end
-        end
-    end
-    curr_obj_vals = []
-    curr_pg_vals = []
-    curr_gen_costs = []
-    # solve each subproblem
-    for node in mg.modelnodes
-        set_start_value.(all_variables(node.model), 1)
-        JuMP.set_optimizer(node.model, Ipopt.Optimizer)
-        optimize!(node.model)
-        t1 = solve_time(node.model)
-
-        start_vals = value.(all_variables(node.model))
-        JuMP.set_optimizer(node.model, Gurobi.Optimizer)
-        set_optimizer_attributes(node.model, "NonConvex" => 2)
-        set_start_value.(all_variables(node.model), start_vals)
-        optimize!(node.model)
-        t2 = solve_time(node.model)
-        pgs = filter(x->!isnothing(x), [variable_by_name(node.model, "pg[$(i)]") for i in 1:N_gen])
-        append!(curr_pg_vals, value.(pgs))
-        append!(solve_times, t1 + t2)
-        append!(curr_obj_vals, objective_value(node.model))
-        append!(curr_gen_costs, value(variable_by_name(node.model, "gen_cost")))
-    end
-    global pg_vals[itr_count] = curr_pg_vals
-    global obj_vals[itr_count] = sum(curr_gen_costs)
-    # Update and solve lagrangian master problems
-    for i in 1:length(N_gs)
-        @constraint(lag_mp, lag_θ[i] <= curr_obj_vals[i] + sum( value.(shared_vars_dict[i]) .* (lag_λ[i] - lambdas[i]) ) )
-    end
-    optimize!(lag_mp)
-    stop_statuses[itr_count] = termination_status(lag_mp)
-    if termination_status(lag_mp) != OPTIMAL
-        rand_num = rand()
-        for i in 1:length(N_gs)
-            lambdas[i] = another_lambdas[i] .* (rand(Int) % 100000)
-        end
-    else
-        for i in 1:length(N_gs)
-            lambdas[i] = value.(lag_λ[i])
-        end
-        if objective_value(lag_mp) <= sum(curr_obj_vals)
-            break
-        end
-    end
-    global itr_count += 1
+obj_vals_neg = []
+mg, shared_vars_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
+                                            Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
+                                            shunt_node, gs, bs, smax, pm.model, lambdas_neg)
+for node in mg.modelnodes
+    JuMP.set_optimizer(node.model, Gurobi.Optimizer)
+    set_optimizer_attributes(node.model, "NonConvex" => 2)
+    optimize!(node.model)
+    append!(obj_vals_neg, objective_value(node.model))
 end
-println("================ End of Solution Process ================")
-=#
-
-# This piece serves to add linking constraints to check correctness
-# outs = Dict()
-# mg, shared_vars_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
-#                                             Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
-#                                             shunt_node, gs, bs, smax, pm.model, lambdas)
-# for line in cut_lines
-#     f_bus = line[1]
-#     t_bus = line[2]
-#     k_f = 0
-#     k_t = 0
-#     for i in eachindex(N_gs)
-#         if f_bus in N_gs[i]
-#             k_f = i
-#         end
-#         if t_bus in N_gs[i]
-#             k_t = i
-#         end
-#         if k_f != 0 && k_t != 0
-#             break
-#         end
-#     end
-#     outs[line, 1] = @linkconstraint(mg, mg.modelnodes[k_f][:W][f_bus, t_bus] == mg.modelnodes[k_t][:W][f_bus, t_bus])
-#     outs[line, 2] = @linkconstraint(mg, mg.modelnodes[k_f][:W][f_bus + N, t_bus] == mg.modelnodes[k_t][:W][f_bus + N, t_bus])
-#     outs[line, 3] = @linkconstraint(mg, mg.modelnodes[k_f][:W][f_bus, t_bus + N] == mg.modelnodes[k_t][:W][f_bus, t_bus + N])
-#     outs[line, 4] = @linkconstraint(mg, mg.modelnodes[k_f][:W][f_bus + N, t_bus + N] == mg.modelnodes[k_t][:W][f_bus + N, t_bus + N])
-#     outs[line, 5] = @linkconstraint(mg, mg.modelnodes[k_f][:plf][line] == mg.modelnodes[k_t][:plf][line])
-#     outs[line, 6] = @linkconstraint(mg, mg.modelnodes[k_f][:plt][line] == mg.modelnodes[k_t][:plt][line])
-#     outs[line, 7] = @linkconstraint(mg, mg.modelnodes[k_f][:qlf][line] == mg.modelnodes[k_t][:qlf][line])
-#     outs[line, 8] = @linkconstraint(mg, mg.modelnodes[k_f][:qlt][line] == mg.modelnodes[k_t][:qlt][line])
-# end
-#
-# optimizer = optimizer_with_attributes(Gurobi.Optimizer, "NonConvex" => 2)
-# optimize!(mg, optimizer)

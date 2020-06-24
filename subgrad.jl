@@ -68,7 +68,7 @@ function build_subgraph_model(
     dm = ModelGraph()
 
     @node(dm, nodes[1:N_partitions])
-#    @node(dm, global_node) # dummy node that stores global variables (on cut)
+    @node(dm, global_node) # dummy node that stores global variables (on cut)
 
     shared_vars_dict = Dict()
 
@@ -204,7 +204,7 @@ function build_subgraph_model(
                                     - sum(λs[k] .* shared_vars) )
         end
     end
-    #=
+
     # global variables
     @variable(global_node, wrr[cut_lines])
     @variable(global_node, wri[cut_lines])
@@ -229,12 +229,12 @@ function build_subgraph_model(
             end
         end
     end
-    =#
+
     return dm, shared_vars_dict
 end
 
 # Main code
-file = "case9.m"
+file = "case5.m"
 data = parse_matpower(file)
 pm = instantiate_model(file, ACRPowerModel, PowerModels.build_opf)
 
@@ -279,7 +279,8 @@ end
 # Partition data
 # ieee case 9
 #N_gs = [[1, 2, 4, 8, 9], [3, 5, 6, 7]]
-N_gs = [[1,4,9],[3,5,6],[2,7,8]]
+#N_gs = [[1,4,9],[3,5,6],[2,7,8]]
+N_gs = [[1,5],[2,3,4]]
 N_partitions = length(N_gs)
 lines = [(data["branch"]["$(i)"]["f_bus"], data["branch"]["$(i)"]["t_bus"]) for i in 1:L]
 L_gs = [[i for i in lines if i[1] in N_g || i[2] in N_g] for N_g in N_gs]
@@ -299,12 +300,16 @@ end
 lambdas = [zeros(Float64, i) for i in λ_dims]
 d_lambda_norm = 1000
 itr_count = 1
-max_itr = 2
+max_itr = 1
 mg_and_dict = ()
 solve_times = []
 lambda_norms = []
 obj_vals = zeros(max_itr)
 
+global mg_and_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
+                                            Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
+                                            shunt_node, gs, bs, smax, pm.model, lambdas)
+#=
 while d_lambda_norm > 1e-6 && itr_count <= max_itr
     println("================ Iteration $(itr_count) ================")
     global mg_and_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
@@ -366,3 +371,4 @@ while d_lambda_norm > 1e-6 && itr_count <= max_itr
     global itr_count += 1
 end
 println("================ End of Solution Process ================")
+=#
