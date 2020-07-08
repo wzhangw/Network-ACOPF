@@ -93,14 +93,14 @@ dm = Model()
 #@variable(dm, W[1:2*N, 1:2*N], Symmetric) # Symmetric is needed for SOCP relaxation
 
 # Original: Exact rank-1 feasible set for W
-@variable(dm, v[1:2*N])
-for i in 1:2*N, j in 1:2*N
-    @constraint(dm, W[i,j] == v[i] * v[j])
-end
+# @variable(dm, v[1:2*N])
+# for i in 1:2*N, j in 1:2*N
+#     @constraint(dm, W[i,j] == v[i] * v[j])
+# end
 
 # reference bus (from PowerModels.jl model)
 ref_bus = 4;
-@constraint(dm, v[ref_bus+N] == 0)
+# @constraint(dm, v[ref_bus+N] == 0)
 # @constraint(dm, W[ref_bus+N, ref_bus+N] == 0)
 # for i in 1:2*N
 #     if i != ref_bus+N
@@ -109,7 +109,7 @@ ref_bus = 4;
 #     end
 # end
 # SDP relaxation
-#@constraint(dm, W in PSDCone())
+@constraint(dm, W in PSDCone())
 
 # SOCP relaxation
 # for line in lines
@@ -254,3 +254,5 @@ end
 #
 # println("Solution time: ", t1 + t2)
 # println("Objective value: ", objective_value(dm))
+set_optimizer(dm, Mosek.Optimizer)
+optimize!(dm)

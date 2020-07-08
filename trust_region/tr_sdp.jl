@@ -1,4 +1,5 @@
 using PowerModels, JuMP, Ipopt, Gurobi, Plasmo, LinearAlgebra, MathOptInterface, DataStructures
+using Mosek, MosekTools
 using HDF5, JLD
 const MOI = MathOptInterface
 
@@ -76,15 +77,17 @@ function build_subgraph_model(
     @node(dm, nodes[1:N_partitions])
 
     shared_vars_dict = Dict()
+    W_vars = Dict()
 
     for k in 1:N_partitions
         gen_idx_k = [i for i in eachindex(gen_bus) if gen_bus[i] in N_gs[k]]
         lines_in_cut = intersect(L_gs[k], cut_lines)
         relevant_idx = union(N_gs[k], vcat([collect(i) for i in L_gs[k]]...))
         expanded_idx = union(relevant_idx, relevant_idx .+ N)
+        idx_dict = Dict(expanded_idx[i] => i for i in 1:length(expanded_idx))
 
-        @variable(nodes[k], W[expanded_idx, expanded_idx])
-        @variable(nodes[k], v[expanded_idx])
+        W_vars[k] = @variable(nodes[k].model, W[1:length(expanded_idx), 1:length(expanded_idx)] in PSDCone())
+        # @variable(nodes[k], v[expanded_idx])
         @variable(nodes[k], plf[L_gs[k]])
         @variable(nodes[k], plt[L_gs[k]])
         @variable(nodes[k], qlf[L_gs[k]])
@@ -93,33 +96,33 @@ function build_subgraph_model(
         @variable(nodes[k], Qmin[i] <= qg[i in gen_idx_k] <= Qmax[i])
         @variable(nodes[k], gen_cost)
 
-        for i in expanded_idx, j in expanded_idx
-            @constraint(nodes[k], W[i,j] == v[i] * v[j])
-        end
+        # for i in expanded_idx, j in expanded_idx
+        #     @constraint(nodes[k], W[i,j] == v[i] * v[j])
+        # end
 
         # constraints 1d, 1e for each node
         for i in N_gs[k]
             if i in shunt_node
                 @constraint(nodes[k], sum(plf[j] for j in L_gs[k] if j[1] == i)
                              + sum(plt[j] for j in L_gs[k] if j[2] == i)
-                             - sum(pg[j] for j in 1:N_gen if gen_bus[j] == i)
                              + sum(Pd[j] for j in 1:N_load if load_bus[j] == i)
-                             - gs[i] * (W[i,i] + W[i+N,i+N]) == 0)
+                             # - gs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) == sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             - gs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) <= sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
                 @constraint(nodes[k], sum(qlf[j] for j in L_gs[k] if j[1] == i)
                              + sum(qlt[j] for j in L_gs[k] if j[2] == i)
-                             - sum(qg[j] for j in 1:N_gen if gen_bus[j] == i)
                              + sum(Qd[j] for j in 1:N_load if load_bus[j] == i)
-                             - bs[i] * (W[i,i] + W[i+N,i+N]) == 0)
+                             # - bs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) == sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             - bs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) <= sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
             else
                 @constraint(nodes[k], sum(plf[j] for j in L_gs[k] if j[1] == i)
                              + sum(plt[j] for j in L_gs[k] if j[2] == i)
-                             - sum(pg[j] for j in 1:N_gen if gen_bus[j] == i)
-                             + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) == 0)
+                             # + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) == sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) <= sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
 
                 @constraint(nodes[k], sum(qlf[j] for j in L_gs[k] if j[1] == i)
                              + sum(qlt[j] for j in L_gs[k] if j[2] == i)
-                             - sum(qg[j] for j in 1:N_gen if gen_bus[j] == i)
-                             + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) == 0)
+                             # + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) == sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) <= sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
             end
         end
 
@@ -155,8 +158,8 @@ function build_subgraph_model(
                         else
                             new_expr = zero(QuadExpr) + plt[line]
                         end
-                        vrefs = [W[f_bus, f_bus], W[f_bus+N, f_bus+N], W[f_bus, t_bus],
-                                 W[f_bus, t_bus+N], W[f_bus+N, t_bus], W[f_bus+N, t_bus+N]]
+                        vrefs = [W[idx_dict[f_bus], idx_dict[f_bus]], W[idx_dict[f_bus+N], idx_dict[f_bus+N]], W[idx_dict[f_bus], idx_dict[t_bus]],
+                                 W[idx_dict[f_bus], idx_dict[t_bus+N]], W[idx_dict[f_bus+N], idx_dict[t_bus]], W[idx_dict[f_bus+N], idx_dict[t_bus+N]]]
                         @constraint(nodes[k], new_expr + sum(quad_terms[pairs[i]] * vrefs[i] for i in eachindex(pairs) if pairs[i] in keys(quad_terms)) == 0)
                     end
                 else # p_or_q == 'q'
@@ -166,8 +169,8 @@ function build_subgraph_model(
                         else
                             new_expr = zero(QuadExpr) + qlt[line]
                         end
-                        vrefs = [W[f_bus, f_bus], W[f_bus+N, f_bus+N], W[f_bus, t_bus],
-                                 W[f_bus, t_bus+N], W[f_bus+N, t_bus], W[f_bus+N, t_bus+N]]
+                        vrefs = [W[idx_dict[f_bus], idx_dict[f_bus]], W[idx_dict[f_bus+N], idx_dict[f_bus+N]], W[idx_dict[f_bus], idx_dict[t_bus]],
+                                 W[idx_dict[f_bus], idx_dict[t_bus+N]], W[idx_dict[f_bus+N], idx_dict[t_bus]], W[idx_dict[f_bus+N], idx_dict[t_bus+N]]]
                         @constraint(nodes[k], new_expr + sum(quad_terms[pairs[i]] * vrefs[i] for i in eachindex(pairs) if pairs[i] in keys(quad_terms)) == 0)
                     end
                 end
@@ -177,14 +180,16 @@ function build_subgraph_model(
         # constraints 1g
 #        for i in N_gs[k]
         for i in relevant_idx
-            @constraint(nodes[k], Vmin[i]^2 <= W[i,i] + W[i+N, i+N] <= Vmax[i]^2)
+            @constraint(nodes[k], Vmin[i]^2 <= W[idx_dict[i],idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]] <= Vmax[i]^2)
         end
 
         # constraints 1h
         for i in L_gs[k]
             if i in keys(smax)
-                @constraint(nodes[k], plf[i]^2 + qlf[i]^2 <= smax[i]^2)
-                @constraint(nodes[k], plt[i]^2 + qlt[i]^2 <= smax[i]^2)
+                # @constraint(nodes[k], plf[i]^2 + qlf[i]^2 <= smax[i]^2)
+                # @constraint(nodes[k], plt[i]^2 + qlt[i]^2 <= smax[i]^2)
+                @constraint(nodes[k].model, [smax[i], plf[i], qlf[i]] in SecondOrderCone())
+                @constraint(nodes[k].model, [smax[i], plt[i], qlt[i]] in SecondOrderCone())
             end
         end
 
@@ -192,10 +197,10 @@ function build_subgraph_model(
         shared_vars = Vector{VariableRef}(undef, 8 * length(lines_in_cut))
         for i in eachindex(lines_in_cut)
             line = lines_in_cut[i]
-            shared_vars[8*(i-1)+1] = W[line[1], line[2]]
-            shared_vars[8*(i-1)+2] = W[line[1], line[2]+N]
-            shared_vars[8*(i-1)+3] = W[line[1]+N, line[2]]
-            shared_vars[8*(i-1)+4] = W[line[1]+N, line[2]+N]
+            shared_vars[8*(i-1)+1] = W[idx_dict[line[1]], idx_dict[line[2]]]
+            shared_vars[8*(i-1)+2] = W[idx_dict[line[1]], idx_dict[line[2]+N]]
+            shared_vars[8*(i-1)+3] = W[idx_dict[line[1]+N], idx_dict[line[2]]]
+            shared_vars[8*(i-1)+4] = W[idx_dict[line[1]+N], idx_dict[line[2]+N]]
             shared_vars[8*(i-1)+5] = plf[line]
             shared_vars[8*(i-1)+6] = plt[line]
             shared_vars[8*(i-1)+7] = qlf[line]
@@ -213,14 +218,197 @@ function build_subgraph_model(
         shared_vars_dict[k] = shared_vars
 
         # objective function
-        @constraint(nodes[k], gen_cost == sum(sum(costs[i][j] * pg[i]^(length(costs[i])-j) for j in 1:length(costs[i])) for i in gen_idx_k))
         if gen_cost_type == 2
             @objective(nodes[k], Min, sum(sum(costs[i][j] * pg[i]^(length(costs[i])-j) for j in 1:length(costs[i])) for i in gen_idx_k)
                                     - sum(λs[k] .* shared_vars) )
         end
     end
 
-    return dm, shared_vars_dict
+    return dm, shared_vars_dict, W_vars
+end
+
+function build_fixed_model(
+    N_gs::Vector{Vector{Int64}},
+    L_gs::Vector{Vector{Tuple{Int64, Int64}}},
+    cut_lines::Vector{Tuple{Int64, Int64}},
+    load_bus::Vector{Int64},
+    Pd::Vector{Float64},
+    Qd::Vector{Float64},
+    gen_bus::Vector{Int64},
+    Pmax::Vector{Float64},
+    Pmin::Vector{Float64},
+    Qmax::Vector{Float64},
+    Qmin::Vector{Float64},
+    gen_cost_type::Int64,
+    costs::Vector{Vector{Float64}},
+    shunt_node::Vector{Int64},
+    gs::Dict,
+    bs::Dict,
+    smax::Dict,
+    pm_model::Model,
+    λs::Vector{Vector{Float64}},
+    new_Ws::Dict
+    )
+
+    N_partitions = length(N_gs)
+
+    cref_type_list = list_of_constraint_types(pm_model)
+    crefs = Dict()
+    for (i,j) in cref_type_list
+        crefs[(i,j)] = all_constraints(pm_model, i, j)
+    end
+
+    dm = ModelGraph()
+
+    @node(dm, nodes[1:N_partitions])
+
+    shared_vars_dict = Dict()
+
+    for k in 1:N_partitions
+        gen_idx_k = [i for i in eachindex(gen_bus) if gen_bus[i] in N_gs[k]]
+        lines_in_cut = intersect(L_gs[k], cut_lines)
+        relevant_idx = union(N_gs[k], vcat([collect(i) for i in L_gs[k]]...))
+        expanded_idx = union(relevant_idx, relevant_idx .+ N)
+        idx_dict = Dict(expanded_idx[i] => i for i in 1:length(expanded_idx))
+
+        @variable(nodes[k].model, W[1:length(expanded_idx), 1:length(expanded_idx)])
+        for i in 1:length(expanded_idx), j in 1:length(expanded_idx)
+            JuMP.fix(W[i,j], new_Ws[k][i,j])
+        end
+
+        @variable(nodes[k], plf[L_gs[k]])
+        @variable(nodes[k], plt[L_gs[k]])
+        @variable(nodes[k], qlf[L_gs[k]])
+        @variable(nodes[k], qlt[L_gs[k]])
+        @variable(nodes[k], Pmin[i] <= pg[i in gen_idx_k] <= Pmax[i])
+        @variable(nodes[k], Qmin[i] <= qg[i in gen_idx_k] <= Qmax[i])
+        @variable(nodes[k], gen_cost)
+
+        # constraints 1d, 1e for each node
+        for i in N_gs[k]
+            if i in shunt_node
+                @constraint(nodes[k], sum(plf[j] for j in L_gs[k] if j[1] == i)
+                             + sum(plt[j] for j in L_gs[k] if j[2] == i)
+                             + sum(Pd[j] for j in 1:N_load if load_bus[j] == i)
+                             # - gs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) == sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             - gs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) <= sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
+                @constraint(nodes[k], sum(qlf[j] for j in L_gs[k] if j[1] == i)
+                             + sum(qlt[j] for j in L_gs[k] if j[2] == i)
+                             + sum(Qd[j] for j in 1:N_load if load_bus[j] == i)
+                             # - bs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) == sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             - bs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) <= sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
+            else
+                @constraint(nodes[k], sum(plf[j] for j in L_gs[k] if j[1] == i)
+                             + sum(plt[j] for j in L_gs[k] if j[2] == i)
+                             # + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) == sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) <= sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
+
+                @constraint(nodes[k], sum(qlf[j] for j in L_gs[k] if j[1] == i)
+                             + sum(qlt[j] for j in L_gs[k] if j[2] == i)
+                             # + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) == sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) <= sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
+            end
+        end
+
+        # constraints 1b, 1c
+        # extract coefficients for constraints 1b, 1c
+        for cref in crefs[cref_type_list[2]]
+            aff_expr = constraint_object(cref).func.aff
+            var = first(keys(aff_expr.terms))
+            # check if cref is actually one of constraints 1b, 1c
+            expr = aff_expr - var
+            drop_zeros!(expr)
+            if (expr == zero(AffExpr))
+                quad_terms = constraint_object(cref).func.terms
+                p_or_q = JuMP.name(var)[3]
+                (_, f_bus, t_bus) = get_index_from_var_name(JuMP.name(var))
+                if (f_bus, t_bus) in lines
+                    is_f = true
+                    line = (f_bus, t_bus)
+                else
+                    is_f = false
+                    line = (t_bus, f_bus)
+                end
+                pairs = [UnorderedPair(variable_by_name(pm_model, "0_vr[$(f_bus)]"), variable_by_name(pm_model, "0_vr[$(f_bus)]")),
+                         UnorderedPair(variable_by_name(pm_model, "0_vi[$(f_bus)]"), variable_by_name(pm_model, "0_vi[$(f_bus)]")),
+                         UnorderedPair(variable_by_name(pm_model, "0_vr[$(f_bus)]"), variable_by_name(pm_model, "0_vr[$(t_bus)]")),
+                         UnorderedPair(variable_by_name(pm_model, "0_vr[$(f_bus)]"), variable_by_name(pm_model, "0_vi[$(t_bus)]")),
+                         UnorderedPair(variable_by_name(pm_model, "0_vi[$(f_bus)]"), variable_by_name(pm_model, "0_vr[$(t_bus)]")),
+                         UnorderedPair(variable_by_name(pm_model, "0_vi[$(f_bus)]"), variable_by_name(pm_model, "0_vi[$(t_bus)]"))]
+                if p_or_q == 'p'
+                    if line in L_gs[k]
+                        if is_f
+                            new_expr = zero(QuadExpr) + plf[line]
+                        else
+                            new_expr = zero(QuadExpr) + plt[line]
+                        end
+                        vrefs = [W[idx_dict[f_bus], idx_dict[f_bus]], W[idx_dict[f_bus+N], idx_dict[f_bus+N]], W[idx_dict[f_bus], idx_dict[t_bus]],
+                                 W[idx_dict[f_bus], idx_dict[t_bus+N]], W[idx_dict[f_bus+N], idx_dict[t_bus]], W[idx_dict[f_bus+N], idx_dict[t_bus+N]]]
+                        @constraint(nodes[k], new_expr + sum(quad_terms[pairs[i]] * vrefs[i] for i in eachindex(pairs) if pairs[i] in keys(quad_terms)) == 0)
+                    end
+                else # p_or_q == 'q'
+                    if line in L_gs[k]
+                        if is_f
+                            new_expr = zero(QuadExpr) + qlf[line]
+                        else
+                            new_expr = zero(QuadExpr) + qlt[line]
+                        end
+                        vrefs = [W[idx_dict[f_bus], idx_dict[f_bus]], W[idx_dict[f_bus+N], idx_dict[f_bus+N]], W[idx_dict[f_bus], idx_dict[t_bus]],
+                                 W[idx_dict[f_bus], idx_dict[t_bus+N]], W[idx_dict[f_bus+N], idx_dict[t_bus]], W[idx_dict[f_bus+N], idx_dict[t_bus+N]]]
+                        @constraint(nodes[k], new_expr + sum(quad_terms[pairs[i]] * vrefs[i] for i in eachindex(pairs) if pairs[i] in keys(quad_terms)) == 0)
+                    end
+                end
+            end
+        end
+
+        # constraints 1g
+#        for i in N_gs[k]
+        for i in relevant_idx
+            @constraint(nodes[k], Vmin[i]^2 <= W[idx_dict[i],idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]] <= Vmax[i]^2)
+        end
+
+        # constraints 1h
+        for i in L_gs[k]
+            if i in keys(smax)
+                # @constraint(nodes[k], plf[i]^2 + qlf[i]^2 <= smax[i]^2)
+                # @constraint(nodes[k], plt[i]^2 + qlt[i]^2 <= smax[i]^2)
+                @constraint(nodes[k].model, [smax[i], plf[i], qlf[i]] in SecondOrderCone())
+                @constraint(nodes[k].model, [smax[i], plt[i], qlt[i]] in SecondOrderCone())
+            end
+        end
+
+        # collect shared (global) variables of the node
+        shared_vars = Vector{VariableRef}(undef, 8 * length(lines_in_cut))
+        for i in eachindex(lines_in_cut)
+            line = lines_in_cut[i]
+            shared_vars[8*(i-1)+1] = W[idx_dict[line[1]], idx_dict[line[2]]]
+            shared_vars[8*(i-1)+2] = W[idx_dict[line[1]], idx_dict[line[2]+N]]
+            shared_vars[8*(i-1)+3] = W[idx_dict[line[1]+N], idx_dict[line[2]]]
+            shared_vars[8*(i-1)+4] = W[idx_dict[line[1]+N], idx_dict[line[2]+N]]
+            shared_vars[8*(i-1)+5] = plf[line]
+            shared_vars[8*(i-1)+6] = plt[line]
+            shared_vars[8*(i-1)+7] = qlf[line]
+            shared_vars[8*(i-1)+8] = qlt[line]
+        end
+        # shared_vars = Vector{VariableRef}(undef, 4 * length(lines_in_cut))
+        # for i in eachindex(lines_in_cut)
+        #     line = lines_in_cut[i]
+        #     shared_vars[4*(i-1)+1] = W[line[1], line[2]]
+        #     shared_vars[4*(i-1)+2] = W[line[1], line[2]+N]
+        #     shared_vars[4*(i-1)+3] = W[line[1]+N, line[2]]
+        #     shared_vars[4*(i-1)+4] = W[line[1]+N, line[2]+N]
+        # end
+
+        shared_vars_dict[k] = shared_vars
+
+        # objective function
+        if gen_cost_type == 2
+            @objective(nodes[k], Min, sum(sum(costs[i][j] * pg[i]^(length(costs[i])-j) for j in 1:length(costs[i])) for i in gen_idx_k)
+                                    - sum(λs[k] .* shared_vars) )
+        end
+    end
+
+    return dm, shared_vars_dict, W_vars
 end
 
 function build_tr_mp(
@@ -256,7 +444,7 @@ function update_lambda_from_model!(lambdas::Vector{Vector{Float64}}, model::Mode
 end
 
 # Main code
-file = "case118.m"
+file = "case9.m"
 data = parse_matpower(file)
 pm = instantiate_model(file, ACRPowerModel, PowerModels.build_opf)
 
@@ -302,12 +490,11 @@ end
 # ieee case 9
 # N_gs = [[1, 2, 4, 8, 9], [3, 5, 6, 7]]
 # N_gs = [[2, 3, 4], [1, 5]]
-# N_gs = [[2, 3], [1, 4, 5]] # bad iteration
-# N_gs = [[1,4,9],[3,5,6],[2,7,8]]
+N_gs = [[1,4,9],[3,5,6],[2,7,8]]
 # N_gs = [[1,4,9],[3,5,6,7],[2,8]]
 # N_gs = [[1,2,3,4,5],[7,8,9,10,14],[6,11,12,13]]
 # N_gs = [[1,2,3,4,5,6,7],[9,10,11,21,22],[12,13,16,17],[14,15,18,19,20],[23,24,25,26],[27,29,30,8,28]]
-N_gs = compute_cluster(file, 25)
+# N_gs = compute_cluster(file, 10)
 lines = [(data["branch"]["$(i)"]["f_bus"], data["branch"]["$(i)"]["t_bus"]) for i in 1:L]
 L_gs = [[i for i in lines if i[1] in N_g || i[2] in N_g] for N_g in N_gs]
 cut_lines = [i for i in lines if sum(i in L_gs[j] for j in 1:length(L_gs)) >= 2]
@@ -324,7 +511,7 @@ end
 lambdas = [zeros(Float64, i) for i in λ_dims]
 tr_center = [zeros(Float64, i) for i in λ_dims]
 itr_count = 1
-max_itr = 1000
+max_itr = 300
 mg_and_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
                                    Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
                                    shunt_node, gs, bs, smax, pm.model, lambdas)
@@ -350,18 +537,29 @@ obj_vals = zeros(max_itr)
 # ϵ = 1e-12
 
 curr_obj_vals = []
-mg, shared_vars_dict = mg_and_dict
+mg, shared_vars_dict, W_vars = mg_and_dict
 for node in mg.modelnodes
-    set_start_value.(all_variables(node.model), 1)
-    JuMP.set_optimizer(node.model, Ipopt.Optimizer)
+    JuMP.set_optimizer(node.model, Mosek.Optimizer)
     optimize!(node.model)
-
-#    start_vals = value.(all_variables(node.model))
-#    JuMP.set_optimizer(node.model, Gurobi.Optimizer)
-#    set_optimizer_attributes(node.model, "NonConvex" => 2)
-#    set_start_value.(all_variables(node.model), start_vals)
-#    optimize!(node.model)
-    append!(curr_obj_vals, objective_value(node.model))
+    # append!(curr_obj_vals, objective_value(node.model))
+    append!(curr_obj_vals, value(objective_function(node.model)))
+end
+new_Ws = Dict()
+for i in eachindex(W_vars)
+    eig = eigen(value.(W_vars[i]))
+    vec = eig.vectors[:,end]
+    new_W = sum(eig.values[end-1:end]) * vec * vec'
+    new_Ws[i] = new_W
+end
+mg_and_dict = build_fixed_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
+                                   Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
+                                   shunt_node, gs, bs, smax, pm.model, lambdas, new_Ws)
+mg, shared_vars_dict, W_vars = mg_and_dict
+for node in mg.modelnodes
+    JuMP.set_optimizer(node.model, Gurobi.Optimizer)
+    optimize!(node.model)
+    # append!(curr_obj_vals, objective_value(node.model))
+    append!(curr_obj_vals, value(objective_function(node.model)))
 end
 major_obj_val = sum(curr_obj_vals)
 
@@ -423,98 +621,36 @@ while itr_count <= max_itr
         save("history.jld", "history", history)
         break
     end
-    global mg, shared_vars_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
+    global mg, shared_vars_dict, W_vars = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
                                                 Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
                                                 shunt_node, gs, bs, smax, pm.model, lambdas)
     curr_obj_vals = []
     for node in mg.modelnodes
-        set_start_value.(all_variables(node.model), 1)
-        JuMP.set_optimizer(node.model, Ipopt.Optimizer)
+        JuMP.set_optimizer(node.model, Mosek.Optimizer)
         optimize!(node.model)
-        while termination_status(node.model) != LOCALLY_SOLVED
-            set_start_value.(all_variables(node.model), rand(Int) % 100)
-            JuMP.set_optimizer(node.model, Ipopt.Optimizer)
-            optimize!(node.model)
-        end
         itr_time += solve_time(node.model)
         push!(term_statuses, raw_status(node.model))
-#        start_vals = value.(all_variables(node.model))
-#        JuMP.set_optimizer(node.model, Gurobi.Optimizer)
-#        set_optimizer_attributes(node.model, "NonConvex" => 2)
-#        set_start_value.(all_variables(node.model), start_vals)
-#        optimize!(node.model)
-#        itr_time += solve_time(node.model)
-        append!(curr_obj_vals, objective_value(node.model))
+        # append!(curr_obj_vals, objective_value(node.model))
+        # append!(curr_obj_vals, value(objective_function(node.model)))
     end
-    history["time"][itr_count] = itr_time
-    history["D_kl"][itr_count] = sum(curr_obj_vals)
-    history["termination_status"][itr_count] = term_statuses
-    history["y_values"][itr_count] = [value.(shared_vars_dict[i]) for i in eachindex(N_gs)]
-    if sum(curr_obj_vals) >= major_obj_val + ξ * (m_kl - major_obj_val)
-        global tr_center = [copy(i) for i in lambdas]
-        global major_obj_val = sum(curr_obj_vals)
-        global Δ = (Δ + Δ_ub) / 2
-        history["step"][itr_count] = "serious"
-    else
-        for i in 1:length(N_gs)
-            @constraint(lag_mp, lag_θ[i] <= curr_obj_vals[i] - sum( value.(shared_vars_dict[i]) .* (lag_λ[i] - lambdas[i]) ) )
-        end
-        global Δ = (Δ_lb + Δ) / 2
-        history["step"][itr_count] = "null"
+    #
+    new_Ws = Dict()
+    for i in eachindex(W_vars)
+        eig = eigen(value.(W_vars[i]))
+        vec = eig.vectors[:,end]
+        new_W = sum(eig.values[end-1:end]) * vec * vec'
+        new_Ws[i] = new_W
     end
-    global itr_count += 1
-    save("intermediary.jld", "Δ", Δ, "tr_center", tr_center)
-    write_to_file(lag_mp, "lag_mp.mps")
-    save("history.jld", "history", history)
-end
-
-#=
-# Subproblems are too slow... (> 25 min for each)
-ipopt_stop_count = copy(itr_count)
-itr_count += 1
-Δ = (Δ_ub + Δ_lb) / 2
-while itr_count <= max_itr
-    term_statuses = []
-    history["TR size"][itr_count] = Δ
-    tr_mp = build_tr_mp(lag_mp, Δ, tr_center)
-    itr_time = 0
-    optimize!(tr_mp)
-    push!(term_statuses, raw_status(tr_mp))
-    itr_time += solve_time(tr_mp)
-    update_lambda_from_model!(lambdas, tr_mp)
-    m_kl = objective_value(tr_mp)
-    history["m_kl"][itr_count] = m_kl
-    history["major_obj_val"][itr_count] = major_obj_val
-    println("mkl: $(m_kl). Dk: $(major_obj_val)")
-    # if m_kl - major_obj_val <= ϵ * (1 + abs(major_obj_val))
-    #     history["step"][itr_count] = "termination"
-    #     save("history.jld", "history", history)
-    #     break
-    # end
-    global mg, shared_vars_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
-                                                Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
-                                                shunt_node, gs, bs, smax, pm.model, lambdas)
-    curr_obj_vals = []
+    mg_and_dict = build_fixed_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
+                                       Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
+                                       shunt_node, gs, bs, smax, pm.model, lambdas, new_Ws)
+    mg, shared_vars_dict, W_vars = mg_and_dict
     for node in mg.modelnodes
-        set_start_value.(all_variables(node.model), 1)
-        JuMP.set_optimizer(node.model, Ipopt.Optimizer)
-        optimize!(node.model)
-        while termination_status(node.model) != LOCALLY_SOLVED
-            set_start_value.(all_variables(node.model), rand(Int) % 100)
-            JuMP.set_optimizer(node.model, Ipopt.Optimizer)
-            optimize!(node.model)
-        end
-        itr_time += solve_time(node.model)
-
-        start_vals = value.(all_variables(node.model))
         JuMP.set_optimizer(node.model, Gurobi.Optimizer)
-        set_optimizer_attributes(node.model, "NonConvex" => 2)
-        set_start_value.(all_variables(node.model), start_vals)
         optimize!(node.model)
-        itr_time += solve_time(node.model)
-        push!(term_statuses, raw_status(node.model))
-        append!(curr_obj_vals, objective_value(node.model))
+        append!(curr_obj_vals, value(objective_function(node.model)))
     end
+
     history["time"][itr_count] = itr_time
     history["D_kl"][itr_count] = sum(curr_obj_vals)
     history["termination_status"][itr_count] = term_statuses
@@ -536,4 +672,3 @@ while itr_count <= max_itr
     write_to_file(lag_mp, "lag_mp.mps")
     save("history.jld", "history", history)
 end
-=#

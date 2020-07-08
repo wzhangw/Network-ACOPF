@@ -1,3 +1,6 @@
+# second version of model code: aims to incorporate multiple lines between nodes,
+# and arbitrary indexing of buses
+
 using PowerModels, JuMP, Ipopt, Gurobi, Plasmo, LinearAlgebra, MathOptInterface, DataStructures
 using HDF5, JLD
 const MOI = MathOptInterface
@@ -43,8 +46,9 @@ end
 
 function build_subgraph_model(
     N_gs::Vector{Vector{Int64}},
-    L_gs::Vector{Vector{Tuple{Int64, Int64}}},
-    cut_lines::Vector{Tuple{Int64, Int64}},
+    lines::Dict,
+    L_gs::Vector{Vector{String}},
+    cut_lines::Vector{String},
     load_bus::Vector{Int64},
     Pd::Vector{Float64},
     Qd::Vector{Float64},
@@ -80,7 +84,7 @@ function build_subgraph_model(
     for k in 1:N_partitions
         gen_idx_k = [i for i in eachindex(gen_bus) if gen_bus[i] in N_gs[k]]
         lines_in_cut = intersect(L_gs[k], cut_lines)
-        relevant_idx = union(N_gs[k], vcat([collect(i) for i in L_gs[k]]...))
+        relevant_idx = union(N_gs[k], vcat([collect(lines[i]) for i in L_gs[k]]...))
         expanded_idx = union(relevant_idx, relevant_idx .+ N)
 
         @variable(nodes[k], W[expanded_idx, expanded_idx])
@@ -100,24 +104,24 @@ function build_subgraph_model(
         # constraints 1d, 1e for each node
         for i in N_gs[k]
             if i in shunt_node
-                @constraint(nodes[k], sum(plf[j] for j in L_gs[k] if j[1] == i)
-                             + sum(plt[j] for j in L_gs[k] if j[2] == i)
+                @constraint(nodes[k], sum(plf[j] for j in L_gs[k] if lines[j][1] == i)
+                             + sum(plt[j] for j in L_gs[k] if lines[j][2] == i)
                              - sum(pg[j] for j in 1:N_gen if gen_bus[j] == i)
                              + sum(Pd[j] for j in 1:N_load if load_bus[j] == i)
                              - gs[i] * (W[i,i] + W[i+N,i+N]) == 0)
-                @constraint(nodes[k], sum(qlf[j] for j in L_gs[k] if j[1] == i)
-                             + sum(qlt[j] for j in L_gs[k] if j[2] == i)
+                @constraint(nodes[k], sum(qlf[j] for j in L_gs[k] if lines[j][1] == i)
+                             + sum(qlt[j] for j in L_gs[k] if lines[j][2] == i)
                              - sum(qg[j] for j in 1:N_gen if gen_bus[j] == i)
                              + sum(Qd[j] for j in 1:N_load if load_bus[j] == i)
                              - bs[i] * (W[i,i] + W[i+N,i+N]) == 0)
             else
-                @constraint(nodes[k], sum(plf[j] for j in L_gs[k] if j[1] == i)
-                             + sum(plt[j] for j in L_gs[k] if j[2] == i)
+                @constraint(nodes[k], sum(plf[j] for j in L_gs[k] if lines[j][1] == i)
+                             + sum(plt[j] for j in L_gs[k] if lines[j][2] == i)
                              - sum(pg[j] for j in 1:N_gen if gen_bus[j] == i)
                              + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) == 0)
 
-                @constraint(nodes[k], sum(qlf[j] for j in L_gs[k] if j[1] == i)
-                             + sum(qlt[j] for j in L_gs[k] if j[2] == i)
+                @constraint(nodes[k], sum(qlf[j] for j in L_gs[k] if lines[j][1] == i)
+                             + sum(qlt[j] for j in L_gs[k] if lines[j][2] == i)
                              - sum(qg[j] for j in 1:N_gen if gen_bus[j] == i)
                              + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) == 0)
             end
@@ -134,13 +138,12 @@ function build_subgraph_model(
             if (expr == zero(AffExpr))
                 quad_terms = constraint_object(cref).func.terms
                 p_or_q = JuMP.name(var)[3]
-                (_, f_bus, t_bus) = get_index_from_var_name(JuMP.name(var))
-                if (f_bus, t_bus) in lines
+                (line, f_bus, t_bus) = get_index_from_var_name(JuMP.name(var))
+                line = string(line)
+                if (f_bus, t_bus) == lines[line]
                     is_f = true
-                    line = (f_bus, t_bus)
                 else
                     is_f = false
-                    line = (t_bus, f_bus)
                 end
                 pairs = [UnorderedPair(variable_by_name(pm_model, "0_vr[$(f_bus)]"), variable_by_name(pm_model, "0_vr[$(f_bus)]")),
                          UnorderedPair(variable_by_name(pm_model, "0_vi[$(f_bus)]"), variable_by_name(pm_model, "0_vi[$(f_bus)]")),
@@ -177,7 +180,7 @@ function build_subgraph_model(
         # constraints 1g
 #        for i in N_gs[k]
         for i in relevant_idx
-            @constraint(nodes[k], Vmin[i]^2 <= W[i,i] + W[i+N, i+N] <= Vmax[i]^2)
+            @constraint(nodes[k], Vmin[bus_idx_dict[i]]^2 <= W[i,i] + W[i+N, i+N] <= Vmax[bus_idx_dict[i]]^2)
         end
 
         # constraints 1h
@@ -192,10 +195,12 @@ function build_subgraph_model(
         shared_vars = Vector{VariableRef}(undef, 8 * length(lines_in_cut))
         for i in eachindex(lines_in_cut)
             line = lines_in_cut[i]
-            shared_vars[8*(i-1)+1] = W[line[1], line[2]]
-            shared_vars[8*(i-1)+2] = W[line[1], line[2]+N]
-            shared_vars[8*(i-1)+3] = W[line[1]+N, line[2]]
-            shared_vars[8*(i-1)+4] = W[line[1]+N, line[2]+N]
+            f_bus = lines[line][1]
+            t_bus = lines[line][2]
+            shared_vars[8*(i-1)+1] = W[f_bus, t_bus]
+            shared_vars[8*(i-1)+2] = W[f_bus, t_bus+N]
+            shared_vars[8*(i-1)+3] = W[f_bus+N, t_bus]
+            shared_vars[8*(i-1)+4] = W[f_bus+N, t_bus+N]
             shared_vars[8*(i-1)+5] = plf[line]
             shared_vars[8*(i-1)+6] = plt[line]
             shared_vars[8*(i-1)+7] = qlf[line]
@@ -256,16 +261,20 @@ function update_lambda_from_model!(lambdas::Vector{Vector{Float64}}, model::Mode
 end
 
 # Main code
-file = "case118.m"
+# file = "../../matpower/data/case30.m"
+file = "case5.m"
 data = parse_matpower(file)
 pm = instantiate_model(file, ACRPowerModel, PowerModels.build_opf)
 
 N = length(data["bus"])
+buses = collect(keys(data["bus"]))
+buses = sort([parse(Int, i) for i in buses])
+bus_idx_dict = Dict(buses[i] => i for i in eachindex(buses))
 L = length(data["branch"])
 
 # collect node data
-Vmin = [data["bus"]["$(i)"]["vmin"] for i in 1:N]
-Vmax = [data["bus"]["$(i)"]["vmax"] for i in 1:N]
+Vmin = [data["bus"]["$(i)"]["vmin"] for i in buses]
+Vmax = [data["bus"]["$(i)"]["vmax"] for i in buses]
 
 # collect load data
 N_load = length(data["load"])
@@ -301,20 +310,23 @@ end
 # Partition data
 # ieee case 9
 # N_gs = [[1, 2, 4, 8, 9], [3, 5, 6, 7]]
-# N_gs = [[2, 3, 4], [1, 5]]
+N_gs = [[2, 3, 4], [1, 5]]
 # N_gs = [[2, 3], [1, 4, 5]] # bad iteration
 # N_gs = [[1,4,9],[3,5,6],[2,7,8]]
+# N_gs = [[1,4,100],[3,5,6],[2,7,8]]
 # N_gs = [[1,4,9],[3,5,6,7],[2,8]]
 # N_gs = [[1,2,3,4,5],[7,8,9,10,14],[6,11,12,13]]
 # N_gs = [[1,2,3,4,5,6,7],[9,10,11,21,22],[12,13,16,17],[14,15,18,19,20],[23,24,25,26],[27,29,30,8,28]]
-N_gs = compute_cluster(file, 25)
-lines = [(data["branch"]["$(i)"]["f_bus"], data["branch"]["$(i)"]["t_bus"]) for i in 1:L]
-L_gs = [[i for i in lines if i[1] in N_g || i[2] in N_g] for N_g in N_gs]
-cut_lines = [i for i in lines if sum(i in L_gs[j] for j in 1:length(L_gs)) >= 2]
+# N_gs = compute_cluster(file, 15)
+lines = Dict(string(i) => (data["branch"]["$(i)"]["f_bus"], data["branch"]["$(i)"]["t_bus"]) for i in 1:L)
+# lines = [(data["branch"]["$(i)"]["f_bus"], data["branch"]["$(i)"]["t_bus"]) for i in 1:L]
+# L_gs = [[i for i in lines if i[1] in N_g || i[2] in N_g] for N_g in N_gs]
+L_gs = [[string(i) for i in eachindex(lines) if lines[i][1] in N_g || lines[i][2] in N_g] for N_g in N_gs]
+cut_lines = [string(i) for i in eachindex(lines) if sum(string(i) in L_gs[j] for j in 1:length(L_gs)) >= 2]
 smax = Dict()
 for i in 1:L
     if "rate_a" in keys(data["branch"]["$(i)"])
-        smax[(data["branch"]["$(i)"]["f_bus"], data["branch"]["$(i)"]["t_bus"])] = data["branch"]["$(i)"]["rate_a"]
+        smax["$(i)"] = data["branch"]["$(i)"]["rate_a"]
     end
 end
 
@@ -325,7 +337,7 @@ lambdas = [zeros(Float64, i) for i in λ_dims]
 tr_center = [zeros(Float64, i) for i in λ_dims]
 itr_count = 1
 max_itr = 1000
-mg_and_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
+mg_and_dict = build_subgraph_model(N_gs, lines, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
                                    Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
                                    shunt_node, gs, bs, smax, pm.model, lambdas)
 shared_vars_dict = mg_and_dict[2]
@@ -366,8 +378,8 @@ end
 major_obj_val = sum(curr_obj_vals)
 
 for line in cut_lines
-    f_bus = line[1]
-    t_bus = line[2]
+    f_bus = lines[line][1]
+    t_bus = lines[line][2]
     k_f = 0
     k_t = 0
     f_idx_in_shared_var_list = 0
@@ -423,7 +435,7 @@ while itr_count <= max_itr
         save("history.jld", "history", history)
         break
     end
-    global mg, shared_vars_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
+    global mg, shared_vars_dict = build_subgraph_model(N_gs, lines, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
                                                 Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
                                                 shunt_node, gs, bs, smax, pm.model, lambdas)
     curr_obj_vals = []
