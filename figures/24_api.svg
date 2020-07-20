@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+    "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<svg contentScriptType="text/ecmascript" width="563.0"
+     xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"
+     contentStyleType="text/css"
+     viewBox="-269.000000 -353.000000 563.000000 489.000000" height="489.0"
+     preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"
+     version="1.1">
+    <g id="edges">
+        <path fill="none" stroke-width="1.0"
+              d="M -6.404076,-123.805344 L -141.715637,-67.281479"
+              class="id_1 id_2" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -6.404076,-123.805344 L -258.610229,-86.709595"
+              class="id_1 id_3" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -6.404076,-123.805344 L 61.673920,-93.065117"
+              class="id_1 id_5" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -141.715637,-67.281479 L -114.307510,-22.795803"
+              class="id_2 id_4" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -141.715637,-67.281479 L -51.360764,-31.455677"
+              class="id_2 id_6" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -258.610229,-86.709595 L -16.146843,124.550339"
+              class="id_3 id_9" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -258.610229,-86.709595 L -144.249329,-208.734909"
+              class="id_3 id_24" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -114.307510,-22.795803 L -16.146843,124.550339"
+              class="id_4 id_9" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 61.673920,-93.065117 L 26.494589,-26.029434"
+              class="id_5 id_10" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -51.360764,-31.455677 L 26.494589,-26.029434"
+              class="id_6 id_10" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -46.207211,18.210381 L 8.322119,46.938885" class="id_7 id_8"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 8.322119,46.938885 L -16.146843,124.550339" class="id_8 id_9"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 8.322119,46.938885 L 26.494589,-26.029434" class="id_8 id_10"
+              stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -16.146843,124.550339 L 120.382507,-18.542423"
+              class="id_9 id_11" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -16.146843,124.550339 L 187.633957,125.455780"
+              class="id_9 id_12" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 26.494589,-26.029434 L 120.382507,-18.542423"
+              class="id_10 id_11" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 26.494589,-26.029434 L 187.633957,125.455780"
+              class="id_10 id_12" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 120.382507,-18.542423 L 171.459564,28.450253"
+              class="id_11 id_13" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 120.382507,-18.542423 L 135.979218,-115.613785"
+              class="id_11 id_14" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 187.633957,125.455780 L 171.459564,28.450253"
+              class="id_12 id_13" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 187.633957,125.455780 L 236.805786,-12.004497"
+              class="id_12 id_23" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 171.459564,28.450253 L 236.805786,-12.004497"
+              class="id_13 id_23" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 135.979218,-115.613785 L 190.590286,-188.716171"
+              class="id_14 id_16" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -7.792938,-223.826340 L 190.590286,-188.716171"
+              class="id_15 id_16" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -7.792938,-223.826340 L -28.218910,-301.558441"
+              class="id_15 id_21" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -7.792938,-223.826340 L -144.249329,-208.734909"
+              class="id_15 id_24" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 190.590286,-188.716171 L 237.087952,-309.801575"
+              class="id_16 id_17" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 190.590286,-188.716171 L 274.197937,-194.510925"
+              class="id_16 id_19" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 237.087952,-309.801575 L 94.194565,-283.521301"
+              class="id_17 id_18" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 237.087952,-309.801575 L 99.873245,-342.706848"
+              class="id_17 id_22" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 94.194565,-283.521301 L -28.218910,-301.558441"
+              class="id_18 id_21" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 274.197937,-194.510925 L 283.414948,-80.952126"
+              class="id_19 id_20" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M 283.414948,-80.952126 L 236.805786,-12.004497"
+              class="id_20 id_23" stroke-opacity="1.0" stroke="#000000"/>
+        <path fill="none" stroke-width="1.0"
+              d="M -28.218910,-301.558441 L 99.873245,-342.706848"
+              class="id_21 id_22" stroke-opacity="1.0" stroke="#000000"/>
+    </g>
+    <g id="nodes">
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="-6.4040756"
+                class="id_1" cy="-123.80534" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="-141.71564"
+                class="id_2" cy="-67.28148" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="-258.61023"
+                class="id_3" cy="-86.709595" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="61.67392"
+                class="id_5" cy="-93.06512" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="-114.30751"
+                class="id_4" cy="-22.795803" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="-51.360764"
+                class="id_6" cy="-31.455677" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="-16.146843"
+                class="id_9" cy="124.55034" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="-144.24933"
+                class="id_24" cy="-208.73491" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="26.494589"
+                class="id_10" cy="-26.029434" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="-46.20721"
+                class="id_7" cy="18.21038" stroke="#000000" stroke-opacity="0.5"
+                stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="8.322119"
+                class="id_8" cy="46.938885" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="120.38251"
+                class="id_11" cy="-18.542423" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="187.63396"
+                class="id_12" cy="125.45578" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="171.45956"
+                class="id_13" cy="28.450253" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="135.97922"
+                class="id_14" cy="-115.613785" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="236.80579"
+                class="id_23" cy="-12.004497" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="190.59029"
+                class="id_16" cy="-188.71617" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="-7.792938"
+                class="id_15" cy="-223.82634" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="-28.21891"
+                class="id_21" cy="-301.55844" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="237.08795"
+                class="id_17" cy="-309.80157" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="274.19794"
+                class="id_19" cy="-194.51093" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="94.194565"
+                class="id_18" cy="-283.5213" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="99.873245"
+                class="id_22" cy="-342.70685" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+        <circle fill-opacity="0.5" fill="#000000" r="10.0" cx="283.41495"
+                class="id_20" cy="-80.952126" stroke="#000000"
+                stroke-opacity="0.5" stroke-width="1.0"/>
+    </g>
+    <g id="node-labels">
+        <text font-size="24" x="-6.4040756" y="-119.49284" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_1">
+            1
+        </text>
+        <text font-size="24" x="-141.71564" y="-62.96898" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_2">
+            2
+        </text>
+        <text font-size="24" x="-258.61023" y="-82.32092" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_3">
+            3
+        </text>
+        <text font-size="24" x="61.67392" y="-88.75457" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_5">
+            5
+        </text>
+        <text font-size="24" x="-114.30751" y="-18.500881" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_4">
+            4
+        </text>
+        <text font-size="24" x="-51.360764" y="-27.068958" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_6">
+            6
+        </text>
+        <text font-size="24" x="-16.146843" y="128.93706" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_9">
+            9
+        </text>
+        <text font-size="24" x="-144.24933" y="-204.42241" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_24">
+            24
+        </text>
+        <text font-size="24" x="26.494589" y="-21.642715" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_10">
+            10
+        </text>
+        <text font-size="24" x="-46.20721" y="22.450615" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_7">
+            7
+        </text>
+        <text font-size="24" x="8.322119" y="51.325603" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_8">
+            8
+        </text>
+        <text font-size="24" x="120.38251" y="-14.229923" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_11">
+            11
+        </text>
+        <text font-size="24" x="187.63396" y="129.76828" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_12">
+            12
+        </text>
+        <text font-size="24" x="171.45956" y="32.838924" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_13">
+            13
+        </text>
+        <text font-size="24" x="135.97922" y="-111.301285" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_14">
+            14
+        </text>
+        <text font-size="24" x="236.80579" y="-7.6158247" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_23">
+            23
+        </text>
+        <text font-size="24" x="190.59029" y="-184.32945" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_16">
+            16
+        </text>
+        <text font-size="24" x="-7.792938" y="-219.43962" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_15">
+            15
+        </text>
+        <text font-size="24" x="-28.21891" y="-297.24594" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_21">
+            21
+        </text>
+        <text font-size="24" x="237.08795" y="-305.48907" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_17">
+            17
+        </text>
+        <text font-size="24" x="274.19794" y="-190.1242" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_19">
+            19
+        </text>
+        <text font-size="24" x="94.194565" y="-279.13458" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_18">
+            18
+        </text>
+        <text font-size="24" x="99.873245" y="-338.39435" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_22">
+            22
+        </text>
+        <text font-size="24" x="283.41495" y="-76.56541" fill="#000000"
+              style="text-anchor: middle; dominant-baseline: central;"
+              font-family="Arial" class="id_20">
+            20
+        </text>
+    </g>
+</svg>

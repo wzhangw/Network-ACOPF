@@ -1,6 +1,7 @@
 using HDF5, JLD, Plots
 
-case_no = 9
+case_no = 24
+#=
 pm_obj_book = Dict(5 => 17551.9,
                    9 => 5296.68,
                    14 => 8081.52,
@@ -9,7 +10,17 @@ pm_obj_book = Dict(5 => 17551.9,
                    57 => 41737.8,
                    118 => 130081,
                    300 => 719725)
+=#
+# pglib results
+pm_obj_book = Dict(5 => 76377.4,
+                   14 => 5999.36,
+                   24 => 134948)
+sdp_obj_book = Dict(5 => 76161.0,
+                   14 => 5998.08,
+                   24 => 132157)
+
 pm_obj = pm_obj_book[case_no]
+sdp_obj = sdp_obj_book[case_no]
 
 # file = "./case$(case_no)_ipopt_only/history.jld"
 # file = "./case$(case_no)_gurobi/history.jld"
@@ -36,7 +47,8 @@ avg_time = sum(time[1:final_itr]) / final_itr
 plt = plot(m_kl[start_itr:final_itr], label = "TR MP Obj. Val.", legend = (0.4,0.3), xlabel = "No. Iteration", ylabel = "Objective Value")
 plot!(D_kl[start_itr:final_itr-1], label = "D_kl")
 plot!(major_obj_val[start_itr:final_itr], label = "D_k")
-plot!(ones(final_itr) * pm_obj, label = "Global Solution", linestyle = :dash)
+plot!(ones(final_itr) * pm_obj, label = "Ipopt", linestyle = :dash)
+plot!(ones(final_itr) * sdp_obj, label = "SDP", linestyle = :dash)
 
 serious_steps = findall(x->x=="serious", steps)
 if !isempty(serious_steps)

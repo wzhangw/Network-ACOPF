@@ -8,7 +8,7 @@ const MOI = MathOptInterface
 using Random
 Random.seed!(0)
 
-include("../partition/spec_cluster.jl")
+include("./partition/spec_cluster.jl")
 
 function get_index_from_var_name(str::String)::Tuple
     first_idx = 0
@@ -98,6 +98,7 @@ function build_subgraph_model(
         @variable(nodes[k], Pmin[i] <= pg[i in gen_idx_k] <= Pmax[i])
         @variable(nodes[k], Qmin[i] <= qg[i in gen_idx_k] <= Qmax[i])
         @variable(nodes[k], gen_cost)
+        @variable(nodes[k], z[L_gs[k]], Bin)
 
         for i in expanded_idx, j in expanded_idx
             @constraint(nodes[k], W[i,j] == v[i] * v[j])
@@ -162,7 +163,7 @@ function build_subgraph_model(
                         end
                         vrefs = [W[f_bus, f_bus], W[f_bus+N, f_bus+N], W[f_bus, t_bus],
                                  W[f_bus, t_bus+N], W[f_bus+N, t_bus], W[f_bus+N, t_bus+N]]
-                        @constraint(nodes[k], new_expr + sum(quad_terms[pairs[i]] * vrefs[i] for i in eachindex(pairs) if pairs[i] in keys(quad_terms)) == 0)
+                        @constraint(nodes[k], new_expr + z[line] * (sum(quad_terms[pairs[i]] * vrefs[i] for i in eachindex(pairs) if pairs[i] in keys(quad_terms))) == 0)
                     end
                 else # p_or_q == 'q'
                     if line in L_gs[k]
@@ -173,7 +174,7 @@ function build_subgraph_model(
                         end
                         vrefs = [W[f_bus, f_bus], W[f_bus+N, f_bus+N], W[f_bus, t_bus],
                                  W[f_bus, t_bus+N], W[f_bus+N, t_bus], W[f_bus+N, t_bus+N]]
-                        @constraint(nodes[k], new_expr + sum(quad_terms[pairs[i]] * vrefs[i] for i in eachindex(pairs) if pairs[i] in keys(quad_terms)) == 0)
+                        @constraint(nodes[k], new_expr + z[line] * (sum(quad_terms[pairs[i]] * vrefs[i] for i in eachindex(pairs) if pairs[i] in keys(quad_terms))) == 0)
                     end
                 end
             end
@@ -190,8 +191,8 @@ function build_subgraph_model(
         # constraints 1h
         for i in L_gs[k]
             if i in keys(smax)
-                @constraint(nodes[k], plf[i]^2 + qlf[i]^2 <= smax[i]^2)
-                @constraint(nodes[k], plt[i]^2 + qlt[i]^2 <= smax[i]^2)
+                @constraint(nodes[k], plf[i]^2 + qlf[i]^2 <= z[i] * smax[i]^2)
+                @constraint(nodes[k], plt[i]^2 + qlt[i]^2 <= z[i] * smax[i]^2)
                 @constraint(nodes[k], -smax[i] <= plf[i] <= smax[i]) # should be redundant
                 @constraint(nodes[k], -smax[i] <= qlf[i] <= smax[i]) # should be redundant
                 @constraint(nodes[k], -smax[i] <= plt[i] <= smax[i]) # should be redundant
@@ -203,8 +204,8 @@ function build_subgraph_model(
         for i in L_gs[k]
             f_bus = lines[i][1]
             t_bus = lines[i][2]
-            @constraint(nodes[k], W[f_bus+N, t_bus] - W[f_bus, t_bus+N] <= tan(angmax[i]) * (W[f_bus, t_bus] + W[f_bus+N, t_bus+N]))
-            @constraint(nodes[k], W[f_bus+N, t_bus] - W[f_bus, t_bus+N] >= tan(angmin[i]) * (W[f_bus, t_bus] + W[f_bus+N, t_bus+N]))
+            @constraint(nodes[k], z[i] * (W[f_bus+N, t_bus] - W[f_bus, t_bus+N]) <= z[i] * tan(angmax[i]) * (W[f_bus, t_bus] + W[f_bus+N, t_bus+N]))
+            @constraint(nodes[k], z[i] * (W[f_bus+N, t_bus] - W[f_bus, t_bus+N]) >= z[i] * tan(angmin[i]) * (W[f_bus, t_bus] + W[f_bus+N, t_bus+N]))
         end
 
         # collect shared (global) variables of the node
@@ -279,15 +280,21 @@ function update_lambda_from_model!(lambdas::Vector{Vector{Float64}}, model::Mode
 end
 
 # Main code
+
+# juniper_solver = JuMP.with_optimizer(Juniper.Optimizer, nl_solver=JuMP.with_optimizer(Ipopt.Optimizer, tol=1e-4, print_level=0), log_levels=[])
+juniper_solver = JuMP.with_optimizer(Juniper.Optimizer, nl_solver=JuMP.with_optimizer(Ipopt.Optimizer, tol=1e-4))
+gurobi_optimizer = optimizer_with_attributes(Gurobi.Optimizer, "NonConvex" => 2)
+
 # file = "../../matpower/data/case30.m"
 # file = "../../pglib-opf/api/pglib_opf_case14_ieee__api.m"
 # file = "../../pglib-opf/sad/pglib_opf_case14_ieee__sad.m"
 # file = "../../pglib-opf/api/pglib_opf_case30_as__api.m"
 # file = "case14.m"
 # file = "../../pglib-opf/api/pglib_opf_case5_pjm__api.m"
-file = "../../pglib-opf/api/pglib_opf_case24_ieee_rts__api.m"
+# file = "../../pglib-opf/api/pglib_opf_case24_ieee_rts__api.m"
+file = "/home/weiqizhang/.julia/packages/PowerModels/fEPoB/test/data/matpower/case5.m"
 data = parse_file(file)
-pm = instantiate_model(file, ACRPowerModel, PowerModels.build_opf)
+pm = instantiate_model(data, ACPPowerModel, PowerModels.build_ots, ref_extensions = [ref_add_on_off_va_bounds!])
 
 N = length(data["bus"])
 buses = collect(keys(data["bus"]))
@@ -332,6 +339,7 @@ end
 
 # Partition data
 # ieee case 9
+N_gs = [parse.(Int, collect(keys(data["bus"])))]
 # N_gs = [[1, 2, 4, 8, 9], [3, 5, 6, 7]]
 # N_gs = [[2, 3, 4], [1, 5]]
 # N_gs = [[2, 3], [1, 4, 5]] # bad iteration
@@ -339,7 +347,7 @@ end
 # N_gs = [[1,4,100],[3,5,6],[2,7,8]]
 # N_gs = [[1,2,3,4,5],[7,8,9,10,14],[6,11,12,13]]
 # N_gs = [[1,4,9],[3,5,6,7],[2,8]]
-N_gs = [[17,18,21,22],[3,24,15,16,19],[12,13,20,23],[9,11,14],[7,8],[10,5,6],[1,2,4]]
+# N_gs = [[17,18,21,22],[3,24,15,16,19],[12,13,20,23],[9,11,14],[7,8],[10,5,6],[1,2,4]]
 # N_gs = [[1,2,3,4,5,6,7],[9,10,11,21,22],[12,13,16,17],[14,15,18,19,20],[23,24,25,26],[27,29,30,8,28]]
 # N_gs = compute_cluster(file, 12)
 lines = Dict(string(i) => (data["branch"]["$(i)"]["f_bus"], data["branch"]["$(i)"]["t_bus"]) for i in 1:L)
@@ -369,8 +377,11 @@ itr_count = 1
 max_itr = 1000
 mg_and_dict = build_subgraph_model(N_gs, lines, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
                                    Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
-                                   shunt_node, gs, bs, smax, angmin, angmax, pm.model, lambdas)
-shared_vars_dict = mg_and_dict[2]
+                                   shunt_node, gs, bs, smax, angmin, angmax, instantiate_model(data, ACRPowerModel, PowerModels.build_opf).model, lambdas)
+mg, shared_vars_dict = mg_and_dict
+JuMP.set_optimizer(mg.modelnodes[1].model, gurobi_optimizer)
+optimize!(mg.modelnodes[1].model)
+#=
 lag_mp = Model(Gurobi.Optimizer)
 lag_θ = @variable(lag_mp, θ[1:length(N_gs)])
 lag_λ = [@variable(lag_mp, [eachindex(shared_vars_dict[i])], base_name = "λ$(i)") for i in eachindex(N_gs)]
@@ -563,79 +574,10 @@ while itr_count <= max_itr
     save("history.jld", "history", history)
 end
 
-#=
-# Subproblems are too slow... (> 25 min for each)
-ipopt_stop_count = copy(itr_count)
-itr_count += 1
-Δ = (Δ_ub + Δ_lb) / 2
-while itr_count <= max_itr
-    term_statuses = []
-    history["TR size"][itr_count] = Δ
-    tr_mp = build_tr_mp(lag_mp, Δ, tr_center)
-    itr_time = 0
-    optimize!(tr_mp)
-    push!(term_statuses, raw_status(tr_mp))
-    itr_time += solve_time(tr_mp)
-    update_lambda_from_model!(lambdas, tr_mp)
-    m_kl = objective_value(tr_mp)
-    history["m_kl"][itr_count] = m_kl
-    history["major_obj_val"][itr_count] = major_obj_val
-    println("mkl: $(m_kl). Dk: $(major_obj_val)")
-    # if m_kl - major_obj_val <= ϵ * (1 + abs(major_obj_val))
-    #     history["step"][itr_count] = "termination"
-    #     save("history.jld", "history", history)
-    #     break
-    # end
-    global mg, shared_vars_dict = build_subgraph_model(N_gs, L_gs, cut_lines, load_bus, Pd, Qd, gen_bus,
-                                                Pmax, Pmin, Qmax, Qmin, gen_cost_type, costs,
-                                                shunt_node, gs, bs, smax, pm.model, lambdas)
-    curr_obj_vals = []
-    for node in mg.modelnodes
-        set_start_value.(all_variables(node.model), 1)
-        JuMP.set_optimizer(node.model, Ipopt.Optimizer)
-        optimize!(node.model)
-        while termination_status(node.model) != LOCALLY_SOLVED
-            set_start_value.(all_variables(node.model), rand(Int) % 100)
-            JuMP.set_optimizer(node.model, Ipopt.Optimizer)
-            optimize!(node.model)
-        end
-        itr_time += solve_time(node.model)
-
-        start_vals = value.(all_variables(node.model))
-        JuMP.set_optimizer(node.model, Gurobi.Optimizer)
-        set_optimizer_attributes(node.model, "NonConvex" => 2)
-        set_start_value.(all_variables(node.model), start_vals)
-        optimize!(node.model)
-        itr_time += solve_time(node.model)
-        push!(term_statuses, raw_status(node.model))
-        append!(curr_obj_vals, objective_value(node.model))
-    end
-    history["time"][itr_count] = itr_time
-    history["D_kl"][itr_count] = sum(curr_obj_vals)
-    history["termination_status"][itr_count] = term_statuses
-    history["y_values"][itr_count] = [value.(shared_vars_dict[i]) for i in eachindex(N_gs)]
-    if sum(curr_obj_vals) >= major_obj_val + ξ * (m_kl - major_obj_val)
-        global tr_center = [copy(i) for i in lambdas]
-        global major_obj_val = sum(curr_obj_vals)
-        global Δ = (Δ + Δ_ub) / 2
-        history["step"][itr_count] = "serious"
-    else
-        for i in 1:length(N_gs)
-            @constraint(lag_mp, lag_θ[i] <= curr_obj_vals[i] - sum( value.(shared_vars_dict[i]) .* (lag_λ[i] - lambdas[i]) ) )
-        end
-        global Δ = (Δ_lb + Δ) / 2
-        history["step"][itr_count] = "null"
-    end
-    global itr_count += 1
-    save("intermediary.jld", "Δ", Δ, "tr_center", tr_center)
-    write_to_file(lag_mp, "lag_mp.mps")
-    save("history.jld", "history", history)
-end
-=#
-
 if findfirst(x->x=="", history["step"]) isa Nothing
     final_itr = length(history["step"])
 else
     final_itr = findfirst(x->x=="", history["step"]) - 1
 end
 avg_time = sum(history["time"][1:final_itr]) / final_itr
+=#

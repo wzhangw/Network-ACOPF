@@ -290,23 +290,23 @@ function build_fixed_model(
                 @constraint(nodes[k], sum(plf[j] for j in L_gs[k] if j[1] == i)
                              + sum(plt[j] for j in L_gs[k] if j[2] == i)
                              + sum(Pd[j] for j in 1:N_load if load_bus[j] == i)
-                             # - gs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) == sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
-                             - gs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) <= sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             - gs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) == sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             # - gs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) <= sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
                 @constraint(nodes[k], sum(qlf[j] for j in L_gs[k] if j[1] == i)
                              + sum(qlt[j] for j in L_gs[k] if j[2] == i)
                              + sum(Qd[j] for j in 1:N_load if load_bus[j] == i)
-                             # - bs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) == sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
-                             - bs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) <= sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             - bs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) == sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             # - bs[i] * (W[idx_dict[i], idx_dict[i]] + W[idx_dict[i+N], idx_dict[i+N]]) <= sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
             else
                 @constraint(nodes[k], sum(plf[j] for j in L_gs[k] if j[1] == i)
                              + sum(plt[j] for j in L_gs[k] if j[2] == i)
-                             # + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) == sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
-                             + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) <= sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) == sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             # + sum(Pd[j] for j in 1:N_load if load_bus[j] == i) <= sum(pg[j] for j in 1:N_gen if gen_bus[j] == i))
 
                 @constraint(nodes[k], sum(qlf[j] for j in L_gs[k] if j[1] == i)
                              + sum(qlt[j] for j in L_gs[k] if j[2] == i)
-                             # + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) == sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
-                             + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) <= sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) == sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
+                             # + sum(Qd[j] for j in 1:N_load if load_bus[j] == i) <= sum(qg[j] for j in 1:N_gen if gen_bus[j] == i))
             end
         end
 
@@ -445,6 +445,8 @@ end
 
 # Main code
 file = "case9.m"
+# file = "../../pglib-opf/api/pglib_opf_case5_pjm__api.m"
+
 data = parse_matpower(file)
 pm = instantiate_model(file, ACRPowerModel, PowerModels.build_opf)
 
@@ -536,6 +538,9 @@ obj_vals = zeros(max_itr)
 # ξ = 0.4
 # ϵ = 1e-12
 
+# optimizer = optimizer_with_attributes(Mosek.Optimizer)
+# gurobi_optimizer = optimizer_with_attributes(Gurobi.Optimizer, "OutputFlag" => 0)
+
 curr_obj_vals = []
 mg, shared_vars_dict, W_vars = mg_and_dict
 for node in mg.modelnodes
@@ -604,6 +609,8 @@ history["termination_status"] = Dict()
 history["y_values"] = Dict()
 
 while itr_count <= max_itr
+    println("====================== Iteration $(itr_count) ======================")
+
     term_statuses = []
     history["TR size"][itr_count] = Δ
     tr_mp = build_tr_mp(lag_mp, Δ, tr_center)
