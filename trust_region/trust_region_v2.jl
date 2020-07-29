@@ -283,9 +283,9 @@ end
 # file = "../../pglib-opf/api/pglib_opf_case14_ieee__api.m"
 # file = "../../pglib-opf/sad/pglib_opf_case14_ieee__sad.m"
 # file = "../../pglib-opf/api/pglib_opf_case30_as__api.m"
-# file = "case14.m"
+file = "case5.m"
 # file = "../../pglib-opf/api/pglib_opf_case5_pjm__api.m"
-file = "../../pglib-opf/api/pglib_opf_case24_ieee_rts__api.m"
+# file = "/home/weiqizhang/anl/pglib-opf/api/pglib_opf_case24_ieee_rts__api.m"
 data = parse_file(file)
 pm = instantiate_model(file, ACRPowerModel, PowerModels.build_opf)
 
@@ -332,6 +332,7 @@ end
 
 # Partition data
 # ieee case 9
+N_gs = [[i] for i in buses]
 # N_gs = [[1, 2, 4, 8, 9], [3, 5, 6, 7]]
 # N_gs = [[2, 3, 4], [1, 5]]
 # N_gs = [[2, 3], [1, 4, 5]] # bad iteration
@@ -339,7 +340,7 @@ end
 # N_gs = [[1,4,100],[3,5,6],[2,7,8]]
 # N_gs = [[1,2,3,4,5],[7,8,9,10,14],[6,11,12,13]]
 # N_gs = [[1,4,9],[3,5,6,7],[2,8]]
-N_gs = [[17,18,21,22],[3,24,15,16,19],[12,13,20,23],[9,11,14],[7,8],[10,5,6],[1,2,4]]
+# N_gs = [[17,18,21,22],[3,24,15,16,19],[12,13,20,23],[9,11,14],[7,8],[10,5,6],[1,2,4]]
 # N_gs = [[1,2,3,4,5,6,7],[9,10,11,21,22],[12,13,16,17],[14,15,18,19,20],[23,24,25,26],[27,29,30,8,28]]
 # N_gs = compute_cluster(file, 12)
 lines = Dict(string(i) => (data["branch"]["$(i)"]["f_bus"], data["branch"]["$(i)"]["t_bus"]) for i in 1:L)
@@ -391,8 +392,10 @@ obj_vals = zeros(max_itr)
 # ξ = 0.4
 # ϵ = 1e-12
 
-nl_solver = optimizer_with_attributes(Ipopt.Optimizer, "print_level" => 0)
-optimizer = optimizer_with_attributes(Juniper.Optimizer, "nl_solver" => nl_solver)
+# nl_solver = optimizer_with_attributes(Ipopt.Optimizer, "print_level" => 0)
+# optimizer = optimizer_with_attributes(Juniper.Optimizer, "nl_solver" => nl_solver)
+# optimizer = optimizer_with_attributes(Ipopt.Optimizer, "print_level" => 0)
+optimizer = optimizer_with_attributes(Gurobi.Optimizer, "NonConvex" => 2, "OutputFlag" => 0)
 gurobi_optimizer = optimizer_with_attributes(Gurobi.Optimizer, "OutputFlag" => 0)
 
 curr_obj_vals = []
@@ -482,7 +485,7 @@ while itr_count <= max_itr
         set_start_value.(all_variables(node.model), 1)
         JuMP.set_optimizer(node.model, optimizer)
         optimize!(node.model)
-        while termination_status(node.model) != LOCALLY_SOLVED
+        while !(termination_status(node.model) in [MOI.OPTIMAL, MOI.LOCALLY_SOLVED])
             # set_start_value.(all_variables(node.model), rand(Int) % 100)
             println("Subgraph not solved to local optimality. Restart with different initial values.")
             set_start_value.(all_variables(node.model), rand())
