@@ -100,51 +100,85 @@ function ref_add_cut_bus_arcs_refs!(ref::Dict{Symbol, Any}, data::Dict{String, A
     =#
 end
 
+# modified from original build_opf
+# get rid of ref buses and apply power balance to only nodes in partition
+function build_opf_mod(pm::AbstractPowerModel)
+    variable_bus_voltage(pm)
+    variable_gen_power(pm)
+    variable_branch_power(pm)
+    variable_dcline_power(pm)
+
+    objective_min_fuel_and_flow_cost_mod(pm)
+
+    constraint_model_voltage(pm)
+
+    for i in setdiff(ids(pm, :bus), ids(pm, :cut_bus))
+        constraint_power_balance(pm, i)
+    end
+
+    for i in ids(pm, :branch)
+        constraint_ohms_yt_from(pm, i)
+        constraint_ohms_yt_to(pm, i)
+
+        constraint_voltage_angle_difference(pm, i)
+
+        constraint_thermal_limit_from(pm, i)
+        constraint_thermal_limit_to(pm, i)
+    end
+
+    for i in ids(pm, :dcline)
+        constraint_dcline_power_losses(pm, i)
+    end
+end
+
+# modified from original build_opf_bf
+# get rid of ref buses and apply power balance to only nodes in partition
+function build_opf_bf_mod(pm::AbstractPowerModel)
+    variable_bus_voltage(pm)
+    variable_gen_power(pm)
+    variable_branch_power(pm)
+    variable_branch_current(pm)
+    variable_dcline_power(pm)
+
+    objective_min_fuel_and_flow_cost_mod(pm)
+
+    constraint_model_current(pm)
+
+    for i in setdiff(ids(pm, :bus), ids(pm, :cut_bus))
+        constraint_power_balance(pm, i)
+    end
+
+    for i in ids(pm, :branch)
+        constraint_power_losses(pm, i)
+        constraint_voltage_magnitude_difference(pm, i)
+
+        constraint_voltage_angle_difference(pm, i)
+
+        constraint_thermal_limit_from(pm, i)
+        constraint_thermal_limit_to(pm, i)
+    end
+
+    for i in ids(pm, :dcline)
+        constraint_dcline_power_losses(pm, i)
+    end
+end
+
+
+# modified from original objective_min_fuel_and_flow_cost to allow for
+# the case with no generators
+function objective_min_fuel_and_flow_cost_mod(pm::AbstractPowerModel; kwargs...)
+    model = check_cost_models(pm)
+    if model == 1
+        return objective_min_fuel_and_flow_cost_pwl(pm; kwargs...)
+    elseif model == 2
+        return objective_min_fuel_and_flow_cost_polynomial(pm; kwargs...)
+    elseif model != nothing
+        Memento.error(_LOGGER, "Only cost models of types 1 and 2 are supported at this time, given cost model type of $(model)")
+    end
+end
+
+
 function build_acopf_with_free_lines(pm::AbstractPowerModel)
-    # modified from original build_opf
-    # get rid of ref buses and apply power balance to only nodes in partition
-    function build_opf_mod(pm::AbstractPowerModel)
-        variable_bus_voltage(pm)
-        variable_gen_power(pm)
-        variable_branch_power(pm)
-        variable_dcline_power(pm)
-
-        objective_min_fuel_and_flow_cost_mod(pm)
-
-        constraint_model_voltage(pm)
-
-        for i in setdiff(ids(pm, :bus), ids(pm, :cut_bus))
-            constraint_power_balance(pm, i)
-        end
-
-        for i in ids(pm, :branch)
-            constraint_ohms_yt_from(pm, i)
-            constraint_ohms_yt_to(pm, i)
-
-            constraint_voltage_angle_difference(pm, i)
-
-            constraint_thermal_limit_from(pm, i)
-            constraint_thermal_limit_to(pm, i)
-        end
-
-        for i in ids(pm, :dcline)
-            constraint_dcline_power_losses(pm, i)
-        end
-    end
-
-    # modified from original objective_min_fuel_and_flow_cost to allow for
-    # the case with no generators
-    function objective_min_fuel_and_flow_cost_mod(pm::AbstractPowerModel; kwargs...)
-        model = check_cost_models(pm)
-        if model == 1
-            return objective_min_fuel_and_flow_cost_pwl(pm; kwargs...)
-        elseif model == 2
-            return objective_min_fuel_and_flow_cost_polynomial(pm; kwargs...)
-        elseif model != nothing
-            Memento.error(_LOGGER, "Only cost models of types 1 and 2 are supported at this time, given cost model type of $(model)")
-        end
-    end
-
     build_opf_mod(pm)
 
     # this is for adding w variables to the model
@@ -168,6 +202,15 @@ function build_acopf_with_free_lines(pm::AbstractPowerModel)
         JuMP.@constraint(pm.model, wi[(fbus, tbus)] == vi[fbus] * vr[tbus] - vr[fbus] * vi[tbus])
     end
 end
+
+function build_socwr_with_free_lines(pm::AbstractWRModel)
+    build_opf_mod(pm)
+end
+
+function build_socbf_with_free_lines(pm::AbstractBFModel)
+    build_opf_bf_mod(pm)
+end
+
 
 function collect_split_vars(pm::AbstractPowerModel)
     wr = var(pm, :wr)
@@ -195,12 +238,33 @@ function collect_split_vars(pm::AbstractPowerModel)
     return shared_vars_dict
 end
 
+function collect_split_vars(pm::AbstractBFModel)
+    p  = var(pm,  :p)
+    q  = var(pm,  :q)
+    ccm = var(pm, :ccm)
+
+    shared_vars_dict = Dict{String, Dict}()
+    shared_vars_dict["ccm"] = Dict{Int64, VariableRef}()
+    shared_vars_dict["p"] = Dict{Tuple{Int64, Int64, Int64}, VariableRef}()
+    shared_vars_dict["q"] = Dict{Tuple{Int64, Int64, Int64}, VariableRef}()
+
+    cut_arcs_from = ref(pm, :cut_arcs_from)
+    for (l,i,j) in cut_arcs_from
+        shared_vars_dict["ccm"][l] = ccm[l]
+        shared_vars_dict["p"][(l,i,j)] = p[(l,i,j)]
+        shared_vars_dict["p"][(l,j,i)] = p[(l,j,i)]
+        shared_vars_dict["q"][(l,i,j)] = q[(l,i,j)]
+        shared_vars_dict["q"][(l,j,i)] = q[(l,j,i)]
+    end
+    return shared_vars_dict
+end
+
 # Main code
 # file = "../../matpower/data/case30.m"
 # file = "../pglib-opf/api/pglib_opf_case14_ieee__api.m"
 # file = "../../pglib-opf/sad/pglib_opf_case14_ieee__sad.m"
-# file = "../pglib-opf/api/pglib_opf_case30_as__api.m"
-file = "case5.m"
+file = "../pglib-opf/api/pglib_opf_case30_as__api.m"
+# file = "case5.m"
 # file = "../pglib-opf/api/pglib_opf_case5_pjm__api.m"
 # file = "../pglib-opf/api/pglib_opf_case24_ieee_rts__api.m"
 data = parse_file(file)
@@ -209,18 +273,20 @@ data = parse_file(file)
 # ieee case 9
 # N_gs = [[parse(Int, i)] for i in keys(data["bus"])]
 # N_gs = [[1, 2, 4, 8, 9], [3, 5, 6, 7]]
-N_gs = [[2,3,4], [1,5]]
+# N_gs = [[2,3,4], [1,5]]
 # N_gs = [[2, 3], [1, 4, 5]] # bad iteration
 # N_gs = [[1,4,9],[3,5,6],[2,7,8]]
 # N_gs = [[1,4,100],[3,5,6],[2,7,8]]
 # N_gs = [[1,2,3,4,5],[7,8,9,10,14],[6,11,12,13]]
 # N_gs = [[1,4,9],[3,5,6,7],[2,8]]
 # N_gs = [[17,18,21,22],[3,24,15,16,19],[12,13,20,23],[9,11,14],[7,8],[10,5,6],[1,2,4]]
-# N_gs = [[1,2,3,4,5,6,7],[9,10,11,21,22],[12,13,16,17],[14,15,18,19,20],[23,24,25,26],[27,29,30,8,28]]
+N_gs = [[1,2,3,4,5,6,7],[9,10,11,21,22],[12,13,16,17],[14,15,18,19,20],[23,24,25,26],[27,29,30,8,28]]
 # N_gs = compute_cluster(file, 3)
 N_gs = [Set(i) for i in N_gs]
 
-models, shared_vars_dict = build_subgraph_model(data, N_gs, ACRPowerModel, build_acopf_with_free_lines)
+# models, shared_vars_dict = build_subgraph_model(data, N_gs, ACRPowerModel, build_acopf_with_free_lines)
+# models, shared_vars_dict = build_subgraph_model(data, N_gs, SOCWRPowerModel, build_socwr_with_free_lines)
+models, shared_vars_dict = build_subgraph_model(data, N_gs, SOCBFPowerModel, build_socbf_with_free_lines)
 
 algo = DD.LagrangeDual(BM.TrustRegionMethod)
 # algo = DD.LagrangeDual()
