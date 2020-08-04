@@ -103,7 +103,16 @@ end
 # modified from original build_opf
 # get rid of ref buses and apply power balance to only nodes in partition
 function build_opf_mod(pm::AbstractPowerModel)
-    variable_bus_voltage(pm)
+    variable_bus_voltage(pm, bounded=false)
+    vr = var(pm, :vr)
+    vi = var(pm, :vi)
+    for (i, bus) in setdiff(ref(pm, :bus), ref(pm, :cut_bus))
+        JuMP.set_lower_bound(vr[i], -bus["vmax"])
+        JuMP.set_upper_bound(vr[i],  bus["vmax"])
+        JuMP.set_lower_bound(vi[i], -bus["vmax"])
+        JuMP.set_upper_bound(vi[i],  bus["vmax"])
+        constraint_voltage_magnitude_bounds(pm, i)
+    end
     variable_gen_power(pm)
     variable_branch_power(pm)
     variable_dcline_power(pm)
@@ -172,15 +181,31 @@ function objective_min_fuel_and_flow_cost_mod(pm::AbstractPowerModel; kwargs...)
         return objective_min_fuel_and_flow_cost_pwl(pm; kwargs...)
     elseif model == 2
         return objective_min_fuel_and_flow_cost_polynomial(pm; kwargs...)
-    elseif model != nothing
+    elseif model == nothing
+        return JuMP.@objective(pm.model, Min, 0)
+    else
         Memento.error(_LOGGER, "Only cost models of types 1 and 2 are supported at this time, given cost model type of $(model)")
     end
 end
 
+function variable_w_matrix(pm::ACRPowerModel; nw::Int=pm.cnw)
+    wrr = var(pm, nw)[:wrr] = JuMP.@variable(pm.model,
+        [i in ids(pm, nw, :bus), j in ids(pm, nw, :bus)], base_name="$(nw)_wrr",
+        start = comp_start_value(ref(pm, nw, :bus, i), "vr_start", 1.0) * comp_start_value(ref(pm, nw, :bus, j), "vr_start", 1.0)
+        )
+    wri = var(pm, nw)[:wri] = JuMP.@variable(pm.model,
+        [i in ids(pm, nw, :bus), j in ids(pm, nw, :bus)], base_name="$(nw)_wri",
+        start = comp_start_value(ref(pm, nw, :bus, i), "vr_start", 1.0) * comp_start_value(ref(pm, nw, :bus, j), "vi_start")
+        )
+    wii = var(pm, nw)[:wii] = JuMP.@variable(pm.model,
+        [i in ids(pm, nw, :bus), j in ids(pm, nw, :bus)], base_name="$(nw)_wii",
+        start = comp_start_value(ref(pm, nw, :bus, i), "vi_start") * comp_start_value(ref(pm, nw, :bus, j), "vi_start")
+        )
+end
 
 function build_acopf_with_free_lines(pm::AbstractPowerModel)
     build_opf_mod(pm)
-
+    #=
     # this is for adding w variables to the model
     variable_bus_voltage_magnitude_sqr(pm)
     variable_buspair_voltage_product(pm)
@@ -201,6 +226,18 @@ function build_acopf_with_free_lines(pm::AbstractPowerModel)
         JuMP.@constraint(pm.model, wr[(fbus, tbus)] == vr[fbus] * vr[tbus] + vi[fbus] * vi[tbus])
         JuMP.@constraint(pm.model, wi[(fbus, tbus)] == vi[fbus] * vr[tbus] - vr[fbus] * vi[tbus])
     end
+    =#
+    variable_w_matrix(pm)
+    wrr = var(pm, :wrr)
+    wri = var(pm, :wri)
+    wii = var(pm, :wii)
+    vr = var(pm, :vr)
+    vi = var(pm, :vi)
+    for (i, _) in ref(pm, :bus), (j, _) in ref(pm, :bus)
+        JuMP.@constraint(pm.model, wrr[i,j] == vr[i] * vr[j])
+        JuMP.@constraint(pm.model, wri[i,j] == vr[i] * vi[j])
+        JuMP.@constraint(pm.model, wii[i,j] == vi[i] * vi[j])
+    end
 end
 
 function build_socwr_with_free_lines(pm::AbstractWRModel)
@@ -211,6 +248,36 @@ function build_socbf_with_free_lines(pm::AbstractBFModel)
     build_opf_bf_mod(pm)
 end
 
+function collect_split_vars(pm::ACRPowerModel)
+    wrr = var(pm, :wrr)
+    wri = var(pm, :wri)
+    wii = var(pm, :wii)
+    p  = var(pm,  :p)
+    q  = var(pm,  :q)
+
+    shared_vars_dict = Dict{String, Dict{Tuple, VariableRef}}()
+    shared_vars_dict["wrr"] = Dict{Tuple{Int64, Int64}, VariableRef}()
+    shared_vars_dict["wri"] = Dict{Tuple{Int64, Int64}, VariableRef}()
+    shared_vars_dict["wir"] = Dict{Tuple{Int64, Int64}, VariableRef}()
+    shared_vars_dict["wii"] = Dict{Tuple{Int64, Int64}, VariableRef}()
+    shared_vars_dict["p"] = Dict{Tuple{Int64, Int64, Int64}, VariableRef}()
+    shared_vars_dict["q"] = Dict{Tuple{Int64, Int64, Int64}, VariableRef}()
+
+    cut_arcs_from = ref(pm, :cut_arcs_from)
+    for (l,i,j) in cut_arcs_from
+        if !((i,j) in keys(shared_vars_dict["wrr"]))
+            shared_vars_dict["wrr"][(i,j)] = wrr[i,j]
+            shared_vars_dict["wri"][(i,j)] = wri[i,j]
+            shared_vars_dict["wir"][(i,j)] = wri[j,i]
+            shared_vars_dict["wii"][(i,j)] = wii[i,j]
+        end
+        shared_vars_dict["p"][(l,i,j)] = p[(l,i,j)]
+        shared_vars_dict["p"][(l,j,i)] = p[(l,j,i)]
+        shared_vars_dict["q"][(l,i,j)] = q[(l,i,j)]
+        shared_vars_dict["q"][(l,j,i)] = q[(l,j,i)]
+    end
+    return shared_vars_dict
+end
 
 function collect_split_vars(pm::AbstractPowerModel)
     wr = var(pm, :wr)
@@ -264,14 +331,14 @@ end
 # file = "../pglib-opf/api/pglib_opf_case14_ieee__api.m"
 # file = "../../pglib-opf/sad/pglib_opf_case14_ieee__sad.m"
 file = "../pglib-opf/api/pglib_opf_case30_as__api.m"
-# file = "case5.m"
+# file = "case9.m"
 # file = "../pglib-opf/api/pglib_opf_case5_pjm__api.m"
 # file = "../pglib-opf/api/pglib_opf_case24_ieee_rts__api.m"
 data = parse_file(file)
 
 # Partition data
 # ieee case 9
-# N_gs = [[parse(Int, i)] for i in keys(data["bus"])]
+N_gs = [[parse(Int, i)] for i in keys(data["bus"])]
 # N_gs = [[1, 2, 4, 8, 9], [3, 5, 6, 7]]
 # N_gs = [[2,3,4], [1,5]]
 # N_gs = [[2, 3], [1, 4, 5]] # bad iteration
@@ -280,8 +347,8 @@ data = parse_file(file)
 # N_gs = [[1,2,3,4,5],[7,8,9,10,14],[6,11,12,13]]
 # N_gs = [[1,4,9],[3,5,6,7],[2,8]]
 # N_gs = [[17,18,21,22],[3,24,15,16,19],[12,13,20,23],[9,11,14],[7,8],[10,5,6],[1,2,4]]
-N_gs = [[1,2,3,4,5,6,7],[9,10,11,21,22],[12,13,16,17],[14,15,18,19,20],[23,24,25,26],[27,29,30,8,28]]
-# N_gs = compute_cluster(file, 3)
+# N_gs = [[1,2,3,4,5,6,7],[9,10,11,21,22],[12,13,16,17],[14,15,18,19,20],[23,24,25,26],[27,29,30,8,28]]
+# N_gs = compute_cluster(file, 5)
 N_gs = [Set(i) for i in N_gs]
 
 # models, shared_vars_dict = build_subgraph_model(data, N_gs, ACRPowerModel, build_acopf_with_free_lines)

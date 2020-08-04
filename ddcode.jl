@@ -1,7 +1,7 @@
 # second version of model code: aims to incorporate multiple lines between nodes,
 # and arbitrary indexing of buses
 
-using PowerModels, JuMP, Ipopt, Gurobi, Plasmo, LinearAlgebra, MathOptInterface, DataStructures, SCIP, Juniper
+using PowerModels, JuMP, Ipopt, Gurobi, Plasmo, LinearAlgebra, MathOptInterface, DataStructures, Juniper
 using DualDecomposition, BundleMethod
 using HDF5, JLD
 const MOI = MathOptInterface
@@ -285,9 +285,9 @@ end
 # file = "../pglib-opf/api/pglib_opf_case14_ieee__api.m"
 # file = "../../pglib-opf/sad/pglib_opf_case14_ieee__sad.m"
 # file = "../pglib-opf/api/pglib_opf_case30_as__api.m"
-# file = "case14.m"
+file = "case5.m"
 # file = "../pglib-opf/api/pglib_opf_case5_pjm__api.m"
-file = "../pglib-opf/api/pglib_opf_case24_ieee_rts__api.m"
+# file = "../pglib-opf/api/pglib_opf_case24_ieee_rts__api.m"
 data = parse_file(file)
 pm = instantiate_model(file, ACRPowerModel, PowerModels.build_opf)
 

@@ -1,7 +1,7 @@
 # second version of model code: aims to incorporate multiple lines between nodes,
 # and arbitrary indexing of buses
 
-using PowerModels, JuMP, Ipopt, Gurobi, Plasmo, LinearAlgebra, MathOptInterface, DataStructures, SCIP, Juniper
+using PowerModels, JuMP, Ipopt, Gurobi, Plasmo, LinearAlgebra, MathOptInterface, DataStructures, Juniper
 using HDF5, JLD
 const MOI = MathOptInterface
 
@@ -394,8 +394,8 @@ obj_vals = zeros(max_itr)
 
 # nl_solver = optimizer_with_attributes(Ipopt.Optimizer, "print_level" => 0)
 # optimizer = optimizer_with_attributes(Juniper.Optimizer, "nl_solver" => nl_solver)
-# optimizer = optimizer_with_attributes(Ipopt.Optimizer, "print_level" => 0)
-optimizer = optimizer_with_attributes(Gurobi.Optimizer, "NonConvex" => 2, "OutputFlag" => 0)
+optimizer = optimizer_with_attributes(Ipopt.Optimizer, "print_level" => 0)
+# optimizer = optimizer_with_attributes(Gurobi.Optimizer, "NonConvex" => 2, "OutputFlag" => 0)
 gurobi_optimizer = optimizer_with_attributes(Gurobi.Optimizer, "OutputFlag" => 0)
 
 curr_obj_vals = []
